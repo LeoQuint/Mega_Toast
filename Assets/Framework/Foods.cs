@@ -3,12 +3,12 @@ using System.Collections;
 
 public class Foods : MonoBehaviour {
 
-    public bool pepper;
-    public Toppings typeTopping;
-    public Condiments typeCondiment;
+    //public bool pepper;
+    //public Toppings typeTopping;
+    //public Condiments typeCondiment;
 
-    public int pointValue = 10;
-
+    //public int pointValue = 10;
+    /*
     void OnTriggerEnter(Collider other)
     {
       
@@ -72,7 +72,7 @@ public class Foods : MonoBehaviour {
 
     }
 
-
+    */
     
 
 }

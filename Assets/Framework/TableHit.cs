@@ -15,7 +15,7 @@ public class TableHit : MonoBehaviour {
 
          
 
-            other.GetComponent<Player>().MultiplyScore(2f);
+           // other.GetComponent<Player>().MultiplyScore(2f);
         }
     }
 }
