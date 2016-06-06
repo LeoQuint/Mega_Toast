@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Camera_Follow : MonoBehaviour {
 
@@ -15,7 +16,7 @@ public class Camera_Follow : MonoBehaviour {
 
     public float offset = 5f;
     private float camOffset;
-    Player pScript;
+    
 
     float stepStartTime;
     float flipDuration = 0.5f;
@@ -27,21 +28,30 @@ public class Camera_Follow : MonoBehaviour {
     public bool overHeadFollow = true;
     bool asFliped = false;
 
+    //public references:
+    public Player pScript;
+
+
     void Start() 
     {
+
+
+
         playerRb = target.GetComponent<Rigidbody>();
-        pScript = target.GetComponent<Player>();
         camOffset = offset;
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () 
     {
+
+   
+
        /* if (GameManager.instance.appStatus != AppStatus.PLAYING)
         {
             return;
         }*/
-        if (pScript.playerStatus == Status.LANDED || pScript.playerStatus == Status.DEAD)
+        if (pScript.playerStatus == Status.LANDED || pScript.playerStatus == Status.MISSED)
         {
             return;
         }

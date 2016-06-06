@@ -11,12 +11,14 @@ public enum Status
     GOINGDOWN,
     OVERHEAD,
     LANDED,
-    DEAD
+    MISSED
 }
 
 public class Player : MonoBehaviour {
 
     //newer CODE
+
+    public GameObject player;
 
     //Delegate used to controls/movements.
     delegate void mDelegate();
@@ -34,9 +36,17 @@ public class Player : MonoBehaviour {
     Quaternion downRotation = new Quaternion(-1f, 0f, 0f, 0f);
     Quaternion initialRotation = new Quaternion(-0.7f, 0f, 0f, 0.7f);
 
+    public BitArray playerStats = new BitArray(32);
+
+    public GameObject playerObject;
+
+
+    public Mesh[] meshes;
+    public Material[] materials;
+
     /// OLD CODE
     
-    public BitArray playerStats = new BitArray(32);
+    
 
     Quaternion stepStartRotation;
     Quaternion stepEndRotation;
@@ -69,9 +79,54 @@ public class Player : MonoBehaviour {
     private List<bool> toppingCollected = new List<bool>();
     private List<bool> condimentCollected = new List<bool>();
 
-    public bool enableTiltControls = true;
+    public bool enableTiltControls = false;
 
     bool hasStarted = false;
+
+    void Update() 
+    {
+
+    }
+
+    void ChangeModel(string bread) 
+    {
+        switch(bread)
+        {
+            case "toast":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[0];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[0];
+                player.transform.FindChild("Mesh").rotation = new Quaternion(-0.7f, 0f, 0f, 0.7f);
+                break;
+
+            case "bagel":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+                break;
+        }
+           
+   
+    }
+
+    public void StartGame() 
+    {
+        playerStatus = Status.INTRO;
+        rb = GetComponent<Rigidbody>();
+
+        rb.isKinematic = true;
+
+        StartCoroutine(DelayBreadLoading());
+    }
+
+    IEnumerator DelayBreadLoading()
+    {
+        
+
+        yield return new WaitForSeconds(2f);
+        playerStatus = Status.CHARGING;
+        powerBar.gameObject.SetActive(true);
+        listDisplay.gameObject.SetActive(true);
+    }
     /*
 	// Use this for initialization
 	void Start () 
@@ -93,13 +148,7 @@ public class Player : MonoBehaviour {
         
 	}
 
-    IEnumerator DelayToastLoading() 
-    {
-        yield return new WaitForSeconds(2f);
-        playerStatus = Status.CHARGING;
-        powerBar.gameObject.SetActive(true);
-        listDisplay.gameObject.SetActive(true);
-    }
+   
 
 	// Update is called once per frame
 	void Update () 

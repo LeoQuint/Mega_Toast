@@ -45,5 +45,19 @@ public class PlayerData {
     {
         this.unlocked = data;
     }
+    //returns the percentage of unlocked elements.
+    public float Completion() 
+    {
+        int numberUnlocked = 0;
+        for (int bitarrayIndex = 0; bitarrayIndex < unlocked.Length; bitarrayIndex++)
+        {
+            if (unlocked[bitarrayIndex])
+            {
+                numberUnlocked++;
+            }
+        }
+
+        return ((float)numberUnlocked/(float)unlocked.Length)*100f;
+    }
 
 }

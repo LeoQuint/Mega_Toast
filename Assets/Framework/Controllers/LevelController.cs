@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 using NS_Level;
 
-
 public class LevelController : MonoBehaviour {
 
     ///Static//////////////////////////////////////////////////////////////////////
