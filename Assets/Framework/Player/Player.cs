@@ -43,6 +43,7 @@ public class Player : MonoBehaviour {
 
     public Mesh[] meshes;
     public Material[] materials;
+   
 
     /// OLD CODE
     
@@ -85,7 +86,14 @@ public class Player : MonoBehaviour {
 
     void Update() 
     {
-
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ChangeModel("toast");
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            ChangeModel("bagel");
+        }
     }
 
     void ChangeModel(string bread) 
@@ -95,12 +103,14 @@ public class Player : MonoBehaviour {
             case "toast":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[0];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[0];
+               
                 player.transform.FindChild("Mesh").rotation = new Quaternion(-0.7f, 0f, 0f, 0.7f);
                 break;
 
             case "bagel":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+                
                 player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
                 break;
         }
