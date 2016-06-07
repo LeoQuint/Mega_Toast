@@ -9,8 +9,10 @@ public class MenuCTR : MonoBehaviour {
 
     public Button soundBtn;
 
-    public GameObject menuUI;
+    public GameObject mainMenuUI;
     public GameObject gameUI;
+    public GameObject titleUI;
+    public GameObject charSelectUI;
 
     bool isSoundOn = false;
 
@@ -27,6 +29,18 @@ public class MenuCTR : MonoBehaviour {
 
     public GameObject btn_Toast;
 
+    public GameObject mainBg;
+    public GameObject mainScene;
+
+    public Transform plateCenter;
+    public string[] selectedChar;
+    public GameObject[] selectedChar_prefab;
+    private int currentCharacterIndex = 0;
+
+    public Camera charSelectCam;
+    private GameObject currentCharacter;
+  
+
     void Awake() 
     {
         aud = GetComponent<AudioSource>();
@@ -34,72 +48,78 @@ public class MenuCTR : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
-	}
+        currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], plateCenter.position, Quaternion.identity) as GameObject;
+        charSelectCam.depth = 0;
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (movingUI)
-        {
-            menuUI.transform.Translate(0f,15f,0f);
-        }
+       
 
 	}
 
-    public void CharSelect() 
+    public void ToggleCharSelect(bool t)
     {
-        isToasty = !isToasty;
-        if (isToasty)
+
+        mainMenuUI.SetActive(!t);
+        charSelectUI.SetActive(t);
+        mainBg.SetActive(!t);
+        mainScene.SetActive(t);        
+    }
+   
+
+    //scroll up or down the list of characters.
+    public void Scroll(int s)
+    {
+        if (currentCharacter)
         {
-            player.GetComponent<MeshRenderer>().enabled = true;
-            player.transform.FindChild("M_bagel").gameObject.SetActive(false);
-            plate.transform.FindChild("M_bagel").GetComponent<MeshRenderer>().enabled = false;
-            plate.transform.FindChild("M_toast").GetComponent<MeshRenderer>().enabled = true;
-            btn_Toast.GetComponent<Image>().sprite = toast;
+            Destroy(currentCharacter);
         }
-        else
+        if (s == 1)
         {
-            player.GetComponent<MeshRenderer>().enabled = false;
-            player.transform.FindChild("M_bagel").gameObject.SetActive(true);
-            plate.transform.FindChild("M_bagel").GetComponent<MeshRenderer>().enabled = true;
-            plate.transform.FindChild("M_toast").GetComponent<MeshRenderer>().enabled = false;
-            btn_Toast.GetComponent<Image>().sprite = bagel;
+            currentCharacterIndex++;
+            if (currentCharacterIndex == selectedChar.Length)
+            {
+                currentCharacterIndex = 0;
+            }
         }
+        else if (s == -1)
+        {
+            currentCharacterIndex--;
+            if (currentCharacterIndex < 0)
+            {
+                currentCharacterIndex = selectedChar.Length - 1;
+            }
+        }
+        currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], plateCenter.position, Quaternion.identity) as GameObject;
+        CharSelect(selectedChar[currentCharacterIndex]);
+    }
+
+    public void CharSelect(string sel) 
+    {
+        player.GetComponent<Player>().ChangeModel(sel);
     }
 
     public void StartGame() 
     {
-        SoundToggle();
-        
-        StartCoroutine(StopMoving());
-        movingUI = true;
-        
+
     }
 
-    IEnumerator StopMoving() 
-    {
-        yield return new WaitForSeconds(2f);
-        movingUI = false;
-        menuUI.SetActive(false);
-        gameUI.SetActive(true);
-    }
 
+    #region Settings
+    //toggle sound on/off
     public void SoundToggle() 
     {
-        isSoundOn = !isSoundOn;
-        if(isSoundOn)
-        {
-            aud.Play();
-            soundBtn.GetComponent<Image>().sprite = soundOn;
-        }
-        else
-        {
-            aud.Pause();
-            soundBtn.GetComponent<Image>().sprite = soundOff;
-        }
-        
+
         
     }
+    //Set the volume for soundfx or music in the settings menu.
+    public void SetVolume(int type, float vol)
+    {
+        
+    }
+
+    #endregion
 
 }

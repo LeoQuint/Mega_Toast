@@ -96,7 +96,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    void ChangeModel(string bread) 
+    public void ChangeModel(string bread) 
     {
         switch(bread)
         {
