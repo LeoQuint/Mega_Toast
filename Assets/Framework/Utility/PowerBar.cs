@@ -19,7 +19,7 @@ public class PowerBar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-       /* if (!LevelController.Instance.isPlaying)
+       if (!LevelController.instance.isPlaying)
         {
             return;
         }
@@ -30,6 +30,6 @@ public class PowerBar : MonoBehaviour {
             {
                 startTime = Time.time;
             }
-        }*/
+        }
 	}
 }

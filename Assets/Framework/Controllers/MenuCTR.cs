@@ -103,7 +103,14 @@ public class MenuCTR : MonoBehaviour {
 
     public void StartGame() 
     {
+        charSelectCam.depth = -2;
+        mainBg.SetActive(false);
+        mainMenuUI.SetActive(false);
+        gameUI.SetActive(true);
 
+        LevelController.instance.isPlaying = true;
+
+        player.GetComponent<Player>().StartGame();
     }
 
 

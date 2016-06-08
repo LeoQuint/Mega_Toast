@@ -38,8 +38,7 @@ public class Player : MonoBehaviour {
 
     public BitArray playerStats = new BitArray(32);
 
-    public GameObject playerObject;
-
+ 
 
     public Mesh[] meshes;
     public Material[] materials;
@@ -84,6 +83,12 @@ public class Player : MonoBehaviour {
 
     bool hasStarted = false;
 
+    void Start()
+    {
+        rb = player.GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+    }
+
     void Update() 
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -120,10 +125,18 @@ public class Player : MonoBehaviour {
 
     public void StartGame() 
     {
-        playerStatus = Status.INTRO;
-        rb = GetComponent<Rigidbody>();
 
-        rb.isKinematic = true;
+        for (int i = 0; i < LevelController.instance.selectedToppings.Count; i++)
+        {
+            toppingCollected.Add(false);
+        }
+        for (int i = 0; i < LevelController.instance.selectedCondiments.Count; i++)
+        {
+            condimentCollected.Add(false);
+        }
+
+        playerStatus = Status.INTRO;
+        rb.isKinematic = false;
 
         StartCoroutine(DelayBreadLoading());
     }
@@ -137,26 +150,66 @@ public class Player : MonoBehaviour {
         powerBar.gameObject.SetActive(true);
         listDisplay.gameObject.SetActive(true);
     }
-    /*
-	// Use this for initialization
-	void Start () 
+
+
+    public void Jump()
     {
-       
-        playerStatus = Status.INTRO;
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
-
-        for (int i = 0; i < LevelController.Instance.selectedToppings.Length; i++)
+        if (playerStatus == Status.CHARGING)
         {
-            toppingCollected.Add(false);
-        }
-        for(int i = 0; i < LevelController.Instance.selectedCondiments.Length; i++)
-        {
-            condimentCollected.Add(false);
-        }
+            playerStatus = Status.GOINGUP;
+            powerBar.GetComponent<PowerBar>().hasLaunched = true;
+            StartCoroutine(DisplayPower());
+            //speedTracker.gameObject.SetActive(true);
+            //heightTracker.gameObject.SetActive(true);
+            scoreTracker.gameObject.SetActive(true);
+            float forceAdded = 1f * Mathf.Pow((0.5f), (1f - powerBar.value));
 
-        
-	}
+            GetComponent<Rigidbody>().AddForce(new Vector3(0f, forceAdded, 0f));
+            stepEndRotation = upRotation;
+            StartCoroutine(Wait(1f));
+            launchBtn.gameObject.SetActive(false);
+        }
+    }
+    void Flip()
+    {
+
+        float step = (Time.time - stepStartTime) / flipDuration;
+        transform.rotation = Quaternion.Lerp(stepStartRotation, stepEndRotation, step);
+
+        if (step >= 1f)
+        {
+            mDel -= Flip;
+            mDel -= MoveList;
+        }
+    }
+
+    IEnumerator DisplayPower()
+    {
+        yield return new WaitForSeconds(2f);
+        powerBar.gameObject.SetActive(false);
+    }
+    IEnumerator Wait(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        stepStartTime = Time.time;
+        stepStartRotation = transform.rotation;
+        //Removes the toaster and adds the plate with bread
+        SetTable();
+        mDel += Flip;
+    }
+
+    void SetTable()
+    {
+        toaster.SetActive(false);
+        plateAndBread.SetActive(true);
+    }
+    void MoveList()
+    {
+        float step = (Time.time - stepStartTime) / flipDuration;
+        listDisplay.transform.position = new Vector3(listDisplay.transform.position.x, (Screen.height * 0.8f) * step, 0f);
+    }
+    /*
+
 
    
 
@@ -186,12 +239,12 @@ public class Player : MonoBehaviour {
             return;
         }*/
 
-        //speedTracker.text = rb.velocity.y.ToString("F1") + " Kmph";
-        /*if (maxHeightAchived < transform.position.y)
-        {
-            maxHeightAchived = transform.position.y;
-            heightTracker.text = "Max height: " + maxHeightAchived.ToString("F1") + " Meters";
-        }*/
+    //speedTracker.text = rb.velocity.y.ToString("F1") + " Kmph";
+    /*if (maxHeightAchived < transform.position.y)
+    {
+        maxHeightAchived = transform.position.y;
+        heightTracker.text = "Max height: " + maxHeightAchived.ToString("F1") + " Meters";
+    }*/
     /*
         if (mDel != null)
         {
@@ -284,15 +337,7 @@ public class Player : MonoBehaviour {
 	}
 
 
-    IEnumerator Wait(float delay) 
-    {
-        yield return new WaitForSeconds(delay);
-        stepStartTime = Time.time;
-        stepStartRotation = transform.rotation;
-        //Removes the toaster and adds the plate with bread
-        SetTable();
-        mDel += Flip;
-    }
+    
 
     public void ExplosiveDeath() 
     {
@@ -310,24 +355,9 @@ public class Player : MonoBehaviour {
         playerStatus = Status.DEAD;
     }
 
-    void MoveList() 
-    {
-        float step = (Time.time - stepStartTime) / flipDuration;
-        listDisplay.transform.position = new Vector3(listDisplay.transform.position.x, (Screen.height * 0.8f) * step, 0f);
-    }
+ 
 
-    void Flip() 
-    {
-
-        float step = (Time.time - stepStartTime) / flipDuration;
-        transform.rotation = Quaternion.Lerp(stepStartRotation, stepEndRotation, step);
-
-        if (step >= 1f)
-        {
-            mDel -= Flip;
-            mDel -= MoveList;
-        }
-    }
+    
 
     public void ChangeToOverhead() 
     {
@@ -342,30 +372,9 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public void Jump() 
-    {
-        if (playerStatus == Status.CHARGING)
-        {
-            playerStatus = Status.GOINGUP;
-            powerBar.GetComponent<PowerBar>().hasLaunched = true;
-            StartCoroutine(DisplayPower());
-            //speedTracker.gameObject.SetActive(true);
-            //heightTracker.gameObject.SetActive(true);
-            scoreTracker.gameObject.SetActive(true);
-            float forceAdded = 1f * Mathf.Pow((0.5f), (1f - powerBar.value));
-            
-            GetComponent<Rigidbody>().AddForce(new Vector3(0f, forceAdded, 0f));
-            stepEndRotation = upRotation;
-            StartCoroutine(Wait(1f));
-            launchBtn.gameObject.SetActive(false);
-        }
-    }
+    
 
-    IEnumerator DisplayPower() 
-    {
-        yield return new WaitForSeconds(2f);
-        powerBar.gameObject.SetActive(false);
-    }
+   
 
 
 
@@ -397,11 +406,7 @@ public class Player : MonoBehaviour {
  
     
 
-    void SetTable() 
-    {
-        toaster.SetActive(false);
-        plateAndBread.SetActive(true);
-    }
+    
 
     public void PepperBonus() 
     {
