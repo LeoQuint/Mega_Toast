@@ -51,7 +51,7 @@ public class Camera_Follow : MonoBehaviour {
         {
             return;
         }*/
-        if (pScript.playerStatus == Status.LANDED || pScript.playerStatus == Status.MISSED)
+        if (pScript.playerStatus == Status.LANDED || pScript.playerStatus == Status.DEAD)
         {
             return;
         }

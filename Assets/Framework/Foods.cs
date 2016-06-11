@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using NS_Level;
 public class Foods : MonoBehaviour {
 
-    //public bool pepper;
-    //public Toppings typeTopping;
-    //public Condiments typeCondiment;
+    public bool pepper;
+    public Toppings typeTopping;
+    public Condiments typeCondiment;
 
-    //public int pointValue = 10;
-    /*
+    public int pointValue = 10;
+    
     void OnTriggerEnter(Collider other)
     {
       
@@ -44,35 +44,35 @@ public class Foods : MonoBehaviour {
 
         bool correctTopping = false;
         
-        for (int i = 0; i < LevelController.Instance.selectedToppings.Length; i++)
+        for (int i = 0; i < LevelController.instance.selectedToppings.Count; i++)
         {
-            if (LevelController.Instance.selectedToppings[i] == typeTopping)
+            if (LevelController.instance.selectedToppings[i] == typeTopping)
             {
                 correctTopping = true;
-                LevelController.Instance.SetCheckMarks(i);
+                LevelController.instance.SetCheckMarks(i);
             }
         }
-        for (int j = 0; j < LevelController.Instance.selectedCondiments.Length; j++)
+        for (int j = 0; j < LevelController.instance.selectedCondiments.Count; j++)
         {
-            if (LevelController.Instance.selectedCondiments[j] == typeCondiment)
+            if (LevelController.instance.selectedCondiments[j] == typeCondiment)
             {
                 correctTopping = true;
-                LevelController.Instance.SetCheckMarks(j);
+                LevelController.instance.SetCheckMarks(j);
             }
         }
         if (correctTopping)
         {
-            other.GetComponent<Player>().AddScore(pointValue, true, typeTopping, typeCondiment);
+           Player.instance.AddScore(pointValue, true, typeTopping, typeCondiment);
         }
         else 
         {
-            other.GetComponent<Player>().AddScore(pointValue, false, typeTopping, typeCondiment);
+            Player.instance.AddScore(pointValue, false, typeTopping, typeCondiment);
         }
 
 
     }
 
-    */
+    
     
 
 }

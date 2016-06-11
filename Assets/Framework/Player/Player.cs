@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+using NS_Level;
+
 public enum Status 
 {
     INTRO,
@@ -11,12 +13,14 @@ public enum Status
     GOINGDOWN,
     OVERHEAD,
     LANDED,
-    MISSED
+    DEAD
 }
 
 public class Player : MonoBehaviour {
 
     //newer CODE
+
+    public static Player instance;
 
     public GameObject player;
 
@@ -54,6 +58,7 @@ public class Player : MonoBehaviour {
     private float stepStartTime;
     public float flipDuration = 1f;
 
+    public float jumpForce = 500f;
     public float movementSpeed = 20f;
     float movement = 0f;
     float movementY = 0f;
@@ -83,6 +88,17 @@ public class Player : MonoBehaviour {
 
     bool hasStarted = false;
 
+    void Awake()
+    {
+        //Instance gets removed by any new instance created.
+        if (instance != null)
+        {
+            Destroy(instance);
+        }
+        //Set our current level to this levelController.
+        instance = this;
+    }
+
     void Start()
     {
         rb = player.GetComponent<Rigidbody>();
@@ -91,14 +107,115 @@ public class Player : MonoBehaviour {
 
     void Update() 
     {
-        if (Input.GetKeyDown(KeyCode.A))
+      
+        if (!LevelController.instance.isPlaying)
         {
-            ChangeModel("toast");
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        if (!hasStarted)
         {
-            ChangeModel("bagel");
+            return;
         }
+        if (playerStatus == Status.LANDED || playerStatus == Status.DEAD)
+        {
+            replayBtn.gameObject.SetActive(true);
+            return;
+        }
+        if (playerStatus == Status.INTRO)
+        {
+            return;
+        }
+        
+
+        //speedTracker.text = rb.velocity.y.ToString("F1") + " Kmph";
+       /* if (maxHeightAchived < transform.position.y)
+        {
+            maxHeightAchived = transform.position.y;
+            heightTracker.text = "Max height: " + maxHeightAchived.ToString("F1") + " Meters";
+        }*/
+    
+        if (mDel != null)
+        {
+            mDel();
+        }
+
+        
+
+        if (playerStatus == Status.CHARGING)
+        {
+            
+            if (Input.GetAxis("Jump") > 0)
+            {
+                playerStatus = Status.GOINGUP;
+                powerBar.GetComponent<PowerBar>().hasLaunched = true;
+                StartCoroutine(DisplayPower());
+                //speedTracker.gameObject.SetActive(true);
+                //heightTracker.gameObject.SetActive(true);
+                scoreTracker.gameObject.SetActive(true);
+                float forceAdded = jumpForce * Mathf.Pow( (0.5f), (1f - powerBar.value) );
+               
+                rb.AddForce(new Vector3(0f, forceAdded, 0f));
+                stepEndRotation = upRotation;
+                StartCoroutine(Wait(1f));
+            }
+            
+
+        }
+       
+
+        if (playerStatus == Status.OVERHEAD)
+        {
+            if (enableTiltControls)
+            {
+                TiltControls();
+            }
+         
+           
+            movementY = Input.GetAxis("Vertical");
+            rb.AddForce(Vector3.forward * movementY * movementSpeed * -1f);
+            movement = Input.GetAxis("Horizontal");
+            rb.AddForce(Vector3.right * movement * movementSpeed * -1f);
+        }
+        else 
+        {
+            if (enableTiltControls)
+            {
+                TiltControls();
+            }
+           
+            movement = Input.GetAxis("Horizontal");
+            rb.AddForce(Vector3.right * movement * movementSpeed);
+        }
+
+
+        rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -2f, 2f), Mathf.Clamp(rb.velocity.y, -30f, 30f), 0f);
+
+        Vector3 clampedX = new Vector3(Mathf.Clamp(transform.position.x, -1.2f, 1.2f), transform.position.y, transform.position.z);
+        transform.position = clampedX;
+
+        if (rb.velocity.y < -2f && playerStatus == Status.GOINGUP)
+        {
+            playerStatus = Status.GOINGDOWN;
+
+            stepStartTime = Time.time;
+            stepStartRotation = upRotation;
+            stepEndRotation = downRotation;
+
+            foreach (bool b in toppingCollected)
+            {
+                if (!b)
+                {
+                    ExplosiveDeath();
+                    return;
+                }
+            }
+
+            LevelController.instance.SpawnCondiments();
+            
+            mDel += Flip;
+            mDel += MoveList;
+        }
+
     }
 
     public void ChangeModel(string bread) 
@@ -147,6 +264,7 @@ public class Player : MonoBehaviour {
 
         yield return new WaitForSeconds(2f);
         playerStatus = Status.CHARGING;
+        hasStarted = true;
         powerBar.gameObject.SetActive(true);
         listDisplay.gameObject.SetActive(true);
     }
@@ -208,136 +326,10 @@ public class Player : MonoBehaviour {
         float step = (Time.time - stepStartTime) / flipDuration;
         listDisplay.transform.position = new Vector3(listDisplay.transform.position.x, (Screen.height * 0.8f) * step, 0f);
     }
-    /*
-
-
-   
-
-	// Update is called once per frame
-	void Update () 
-    {
-        if (!LevelController.Instance.isPlaying)
-        {
-            return;
-        }
-        else if(!hasStarted)
-        {
-            rb.isKinematic = false;
-            StartCoroutine(DelayToastLoading());
-            hasStarted = true;
-        }
-
-
-        if (playerStatus == Status.LANDED || playerStatus == Status.DEAD)
-        {
-            replayBtn.gameObject.SetActive(true);
-            return;
-        }
-
-        if (playerStatus == Status.INTRO)
-        {
-            return;
-        }*/
-
-    //speedTracker.text = rb.velocity.y.ToString("F1") + " Kmph";
-    /*if (maxHeightAchived < transform.position.y)
-    {
-        maxHeightAchived = transform.position.y;
-        heightTracker.text = "Max height: " + maxHeightAchived.ToString("F1") + " Meters";
-    }*/
-    /*
-        if (mDel != null)
-        {
-            mDel();
-        }
-
-        if (transform.position.y < 1f)
-        {
-            playerStatus = Status.LANDED;
-            return;
-        }
-
-        if (playerStatus == Status.CHARGING)
-        {
-            
-            if (Input.GetAxis("Jump") > 0)
-            {
-                playerStatus = Status.GOINGUP;
-                powerBar.GetComponent<PowerBar>().hasLaunched = true;
-                StartCoroutine(DisplayPower());
-                //speedTracker.gameObject.SetActive(true);
-                //heightTracker.gameObject.SetActive(true);
-                scoreTracker.gameObject.SetActive(true);
-                float forceAdded = 1f * Mathf.Pow( (0.5f), (1f - powerBar.value) );
-
-                GetComponent<Rigidbody>().AddForce(new Vector3(0f, forceAdded, 0f));
-                stepEndRotation = upRotation;
-                StartCoroutine(Wait(1f));
-            }
-            
-
-        }
-       
-
-        if (playerStatus == Status.OVERHEAD)
-        {
-            if (enableTiltControls)
-            {
-                TiltControls();
-            }
-         
-           
-            movementY = Input.GetAxis("Vertical");
-            rb.AddForce(Vector3.forward * movementY * movementSpeed * -1f);
-            movement = Input.GetAxis("Horizontal");
-            rb.AddForce(Vector3.right * movement * movementSpeed * -1f);
-        }
-        else 
-        {
-            if (enableTiltControls)
-            {
-                TiltControls();
-            }
-           
-            movement = Input.GetAxis("Horizontal");
-            rb.AddForce(Vector3.right * movement * movementSpeed);
-        }
-
-
-        rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -2f, 2f), Mathf.Clamp(rb.velocity.y, -30f, 30f), 0f);
-
-        Vector3 clampedX = new Vector3(Mathf.Clamp(transform.position.x, -1.2f, 1.2f), transform.position.y, transform.position.z);
-        transform.position = clampedX;
-
-        if (rb.velocity.y < -2f && playerStatus == Status.GOINGUP)
-        {
-            playerStatus = Status.GOINGDOWN;
-
-            stepStartTime = Time.time;
-            stepStartRotation = upRotation;
-            stepEndRotation = downRotation;
-
-            foreach (bool b in toppingCollected)
-            {
-                if (!b)
-                {
-                    ExplosiveDeath();
-                    return;
-                }
-            }
-
-            LevelController.Instance.SpawnDownObjects();
-            
-            mDel += Flip;
-            mDel += MoveList;
-        }
-
-        
-       
-	}
 
 
     
+   
 
     public void ExplosiveDeath() 
     {
@@ -372,11 +364,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    
-
-   
-
-
 
     void TiltControls() 
     {
@@ -400,13 +387,8 @@ public class Player : MonoBehaviour {
             dir.Normalize();
 
         dir *= Time.deltaTime;
-        GetComponent<Rigidbody>().AddForce(dir * tiltMovespeed);
+        rb.AddForce(dir * tiltMovespeed);
     }
-        
- 
-    
-
-    
 
     public void PepperBonus() 
     {
@@ -430,9 +412,9 @@ public class Player : MonoBehaviour {
         {
             if (top != Toppings.COUNT)
             {
-                for (int i = 0; i < LevelController.Instance.selectedToppings.Length; i++)
+                for (int i = 0; i < LevelController.instance.selectedToppings.Count; i++)
                 {
-                    if (LevelController.Instance.selectedToppings[i] == top)
+                    if (LevelController.instance.selectedToppings[i] == top)
                     {
                         toppingCollected[i] = true;
                         break;
@@ -441,9 +423,9 @@ public class Player : MonoBehaviour {
             }
             if (con != Condiments.COUNT)
             {
-                for (int j = 0; j < LevelController.Instance.selectedCondiments.Length; j++)
+                for (int j = 0; j < LevelController.instance.selectedCondiments.Count; j++)
                 {
-                    if (LevelController.Instance.selectedCondiments[j] == con)
+                    if (LevelController.instance.selectedCondiments[j] == con)
                     {
                         condimentCollected[j] = true;
                         break;
@@ -481,6 +463,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    */
+    
 
 }

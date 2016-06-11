@@ -30,24 +30,31 @@ public class LevelController : MonoBehaviour {
 
     public bool isPlaying = false;
 
+    public Transform startPOS;
+
+    public GameObject[] toppings;
+    public GameObject[] condiments;
+    public GameObject[] bonuses;
+
+    public Image li_1;
+    public Image li_2;
+    public Image li_3;
+    public Sprite[] cSprites;
+    public Sprite[] tSprites;
     ///Private/////////////////////////////////////////////////////////////////////
     ///                                                                         ///
     ///                                                                         ///
     ///////////////////////////////////////////////////////////////////////////////   
 
-    //Lists of gameobject toppings, condiments and bonuses available.
-    List<GameObject> toppings = new List<GameObject>();
-    List<GameObject> condiments = new List<GameObject>();
-    List<GameObject> bonuses = new List<GameObject>();
     //Reference to the player position. Used to spawn/despawn objects in the scene.   
     Transform targetPlayer;
     //Lists holding references to each spawned gameobject going up / down.
     List<GameObject> upSpawned = new List<GameObject>();
     List<GameObject> downSpawned = new List<GameObject>();
 
+    
 
-
-	void Awake () 
+    void Awake () 
     {
         //Instance gets removed by any new instance created.
         if (instance != null)
@@ -59,14 +66,16 @@ public class LevelController : MonoBehaviour {
     }
 
     void Start() 
-    { 
+    {
         //Gather all resources needed in this level.
-        CreateSandwich(true);
+        BuildLevel();
+        
     }
     //
     void BuildLevel() 
     {
-        
+        CreateSandwich(true);
+        SpawnToppings(50);
     }
     //Creates the sandwich the player is trying to build. If isRandom = true we create a random sandwich.
     //Size = the number of condiments and toppings to be randomed.
@@ -81,8 +90,7 @@ public class LevelController : MonoBehaviour {
                 bool duplicated = false;
                 int rngTop = 0;
                 int rngCond = 0;
-                int debug1 = 0;
-                int debug2= 0; 
+               
                 do
                 {
                     duplicated = false;
@@ -126,26 +134,13 @@ public class LevelController : MonoBehaviour {
             }
 
         }
-        for (int i = 0; i < 3; i++)
-        {
-            Debug.Log(selectedCondiments[i]);
-            Debug.Log(selectedToppings[i]);
-        }
+
+        li_1.sprite = tSprites[(int)selectedToppings[0]];
+        li_2.sprite = tSprites[(int)selectedToppings[1]];
+        li_3.sprite = tSprites[(int)selectedToppings[2]];
     }
 
-    void SpawnToppings() 
-    {
-    
-    }
-
-    void SpawnCondiments() 
-    {
-    
-    }
-
-
-    /*
-    void SpawnUpObjects(float amount)
+    void SpawnToppings(float amount) 
     {
         float xPOS;
         float yPOS;
@@ -155,14 +150,14 @@ public class LevelController : MonoBehaviour {
             if (Random.Range(0f, 1f) < bonusesSpawnRate)
             {
                 xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = transform.position.y + 5f + i;
+                yPOS = startPOS.position.y + 5f + i;
                 GameObject newlySpawned = Instantiate(bonuses[0], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
                 upSpawned.Add(newlySpawned);
             }
             else if (Random.Range(0f, 1f) < objectSpawnRate)
             {
                 xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = transform.position.y + 5f + i;
+                yPOS = startPOS.position.y + 5f + i;
                 GameObject newlySpawned = Instantiate(toppings[Random.Range(0, (int)Toppings.COUNT)], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
                 upSpawned.Add(newlySpawned);
             }
@@ -170,40 +165,9 @@ public class LevelController : MonoBehaviour {
         }
 
         //spawnedHeight += transform.position.y + amount;
-
-    }*/
-
-    /*
-
-    void SpawnUpObjects(float amount) 
-    {
-        float xPOS;
-        float yPOS;
-
-        for (int i = 0; i < amount; i++)
-        {
-            if(Random.Range(0f, 1f) < pepperSpawnRate)
-            {
-                xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = transform.position.y + 5f + i + spawnedHeight;
-                GameObject newlySpawned = Instantiate(pepperBoost, new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
-                upSpawned.Add(newlySpawned);
-            }
-            else if (Random.Range(0f, 1f) < objectSpawnRate)
-            {
-                xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = transform.position.y + 5f + i + spawnedHeight;
-                GameObject newlySpawned = Instantiate(toppings[Random.Range(0, (int)Toppings.COUNT)], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
-                upSpawned.Add(newlySpawned);
-            }
-            
-        }
-
-        spawnedHeight += transform.position.y + amount;
-       
     }
 
-    public void SpawnDownObjects() 
+    public void SpawnCondiments() 
     {
         li_1.sprite = cSprites[(int)selectedCondiments[0]];
         li_2.sprite = cSprites[(int)selectedCondiments[1]];
@@ -215,7 +179,7 @@ public class LevelController : MonoBehaviour {
         {
             if (g.transform.parent == null)
             {
-                
+
                 Destroy(g);
             }
         }
@@ -237,7 +201,29 @@ public class LevelController : MonoBehaviour {
 
         }
 
+    }
 
-    }*/
+    public void SetCheckMarks(int c)
+    {
+        switch (c)
+        {
+            case 1:
+                li_1.transform.FindChild("Image").gameObject.SetActive(true);
+                break;
+            case 2:
+                li_2.transform.FindChild("Image").gameObject.SetActive(true);
+                break;
+            case 3:
+                li_3.transform.FindChild("Image").gameObject.SetActive(true);
+                break;
+            case 999:
+                li_1.transform.FindChild("Image").gameObject.SetActive(false);
+                li_2.transform.FindChild("Image").gameObject.SetActive(false);
+                li_3.transform.FindChild("Image").gameObject.SetActive(false);
+                break;
+        }
+    }
+
+    
 
 }
