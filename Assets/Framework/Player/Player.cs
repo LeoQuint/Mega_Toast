@@ -292,7 +292,7 @@ public class Player : MonoBehaviour {
     {
 
         float step = (Time.time - stepStartTime) / flipDuration;
-        transform.rotation = Quaternion.Lerp(stepStartRotation, stepEndRotation, step);
+        player.transform.rotation = Quaternion.Lerp(stepStartRotation, stepEndRotation, step);
 
         if (step >= 1f)
         {
@@ -310,7 +310,7 @@ public class Player : MonoBehaviour {
     {
         yield return new WaitForSeconds(delay);
         stepStartTime = Time.time;
-        stepStartRotation = transform.rotation;
+        stepStartRotation = player.transform.rotation;
         //Removes the toaster and adds the plate with bread
         SetTable();
         mDel += Flip;
@@ -333,12 +333,12 @@ public class Player : MonoBehaviour {
 
     public void ExplosiveDeath() 
     {
-        int childCount =  transform.FindChild("GatherLocation").childCount;
+        int childCount =  player.transform.FindChild("GatherLocation").childCount;
         List<Transform> childs = new List<Transform>();
         for (int i = 0; i < childCount; i++)
         {
-            transform.FindChild("GatherLocation").GetChild(i).gameObject.AddComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-100f, 100f), Random.Range(-100f, 100f), Random.Range(-100f, 100f)));
-            childs.Add(transform.FindChild("GatherLocation").GetChild(i));
+            player.transform.FindChild("GatherLocation").GetChild(i).gameObject.AddComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-100f, 100f), Random.Range(-100f, 100f), Random.Range(-100f, 100f)));
+            childs.Add(player.transform.FindChild("GatherLocation").GetChild(i));
         }
         foreach (Transform child in childs)
         {

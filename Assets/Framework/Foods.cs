@@ -37,9 +37,9 @@ public class Foods : MonoBehaviour {
             other.gameObject.GetComponent<BoxCollider>().size = new Vector3(colliderSize.x, colliderSize.y + 0.001f, colliderSize.z);
             
         }
-        if (pepper &&  other.GetComponent<Player>().playerStatus == Status.GOINGUP)
+        if (pepper &&  Player.instance.playerStatus == Status.GOINGUP)
         {
-            other.GetComponent<Player>().PepperBonus();
+            Player.instance.PepperBonus();
         }
 
         bool correctTopping = false;
@@ -49,7 +49,7 @@ public class Foods : MonoBehaviour {
             if (LevelController.instance.selectedToppings[i] == typeTopping)
             {
                 correctTopping = true;
-                LevelController.instance.SetCheckMarks(i);
+                LevelController.instance.SetCheckMarks(i+1);
             }
         }
         for (int j = 0; j < LevelController.instance.selectedCondiments.Count; j++)
@@ -57,7 +57,7 @@ public class Foods : MonoBehaviour {
             if (LevelController.instance.selectedCondiments[j] == typeCondiment)
             {
                 correctTopping = true;
-                LevelController.instance.SetCheckMarks(j);
+                LevelController.instance.SetCheckMarks(j+1);
             }
         }
         if (correctTopping)
