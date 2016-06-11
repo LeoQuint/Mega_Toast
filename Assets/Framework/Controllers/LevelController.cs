@@ -3,8 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-
-
 using NS_Level;
 
 public class LevelController : MonoBehaviour {
@@ -25,9 +23,7 @@ public class LevelController : MonoBehaviour {
     //Selected Toppings and condiments for the sandwich built in this level.
     public List<Toppings> selectedToppings = new List<Toppings>();
     public List<Condiments> selectedCondiments = new List<Condiments>();
-    //Lists of available toppings/condiments for this level.
-    public Toppings[] availableToppings;
-    public Condiments[] availableCondiments;
+
     //Rate of spawn for objects and bonuses.
     public float objectSpawnRate = 0.5f;
     public float bonusesSpawnRate = 0.1f;
@@ -58,14 +54,13 @@ public class LevelController : MonoBehaviour {
         {
             Destroy(instance);
         }
-	}
-
-    void Start() 
-    {
         //Set our current level to this levelController.
         instance = this;
-        //Gather all resources needed in this level.
+    }
 
+    void Start() 
+    { 
+        //Gather all resources needed in this level.
         CreateSandwich(true);
     }
     //
@@ -81,45 +76,60 @@ public class LevelController : MonoBehaviour {
         selectedCondiments.Clear();
         if (isRandom)
         {
-            for (int index = 0; index < size; index++)
+            for (int index = 0; index < 3; index++)
             {
                 bool duplicated = false;
                 int rngTop = 0;
                 int rngCond = 0;
-
+                int debug1 = 0;
+                int debug2= 0; 
                 do
                 {
+                    duplicated = false;
                     rngTop = Random.Range(0, (int)Toppings.COUNT);
                     for (int i = 0; i < selectedToppings.Count; i++)
                     {
                         if (selectedToppings[i] == (Toppings)rngTop)
                         {
+                            
                             duplicated = true;
                             break;
                         }
+                        
                     }
+              
                 } while (duplicated);
 
                 selectedToppings.Add((Toppings)rngTop);
 
-                duplicated = false;
+                
 
                 do
                 {
+                    duplicated = false;
                     rngCond = Random.Range(0, (int)Condiments.COUNT);
-                    for (int i = 0; i < selectedCondiments.Count; i++)
+                   
+                    for (int j = 0; j < selectedCondiments.Count; j++)
                     {
-                        if (selectedCondiments[i] == (Condiments)rngCond)
+                        if (selectedCondiments[j] == (Condiments)rngCond)
                         {
                             duplicated = true;
+                            
                             break;
                         }
+                       
                     }
+                   
                 } while (duplicated);
 
                 selectedCondiments.Add((Condiments)rngCond);
             }
 
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log(selectedCondiments[i]);
+            Debug.Log(selectedToppings[i]);
         }
     }
 
