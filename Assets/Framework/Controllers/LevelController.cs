@@ -41,21 +41,24 @@ public class LevelController : MonoBehaviour {
     public Image li_3;
     public Sprite[] cSprites;
     public Sprite[] tSprites;
+
+    public Transform targetPlayer;
     ///Private/////////////////////////////////////////////////////////////////////
     ///                                                                         ///
     ///                                                                         ///
     ///////////////////////////////////////////////////////////////////////////////   
 
     //Reference to the player position. Used to spawn/despawn objects in the scene.   
-    Transform targetPlayer;
+
     //Lists holding references to each spawned gameobject going up / down.
     List<GameObject> upSpawned = new List<GameObject>();
     List<GameObject> downSpawned = new List<GameObject>();
 
-    
+    float spawnedHeight;
 
     void Awake () 
     {
+        
         //Instance gets removed by any new instance created.
         if (instance != null)
         {
@@ -63,6 +66,8 @@ public class LevelController : MonoBehaviour {
         }
         //Set our current level to this levelController.
         instance = this;
+
+        spawnedHeight = 0f;
     }
 
     void Start() 
@@ -72,6 +77,13 @@ public class LevelController : MonoBehaviour {
         
     }
     //
+    void Update() 
+    {
+        if (targetPlayer.position.y > spawnedHeight - 10f)
+        {
+            SpawnToppings(20f, false);
+        }
+    }
     void BuildLevel() 
     {
         CreateSandwich(true);
@@ -140,31 +152,37 @@ public class LevelController : MonoBehaviour {
         li_3.sprite = tSprites[(int)selectedToppings[2]];
     }
 
-    void SpawnToppings(float amount) 
+    void SpawnToppings(float amount, bool initial = true) 
     {
         float xPOS;
         float yPOS;
+
+        if (initial)
+        {
+            spawnedHeight = startPOS.position.y + 5f;
+        }
+        
 
         for (int i = 0; i < amount; i++)
         {
             if (Random.Range(0f, 1f) < bonusesSpawnRate)
             {
                 xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = startPOS.position.y + 5f + i;
+                yPOS = i + spawnedHeight;
                 GameObject newlySpawned = Instantiate(bonuses[0], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
                 upSpawned.Add(newlySpawned);
             }
             else if (Random.Range(0f, 1f) < objectSpawnRate)
             {
                 xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = startPOS.position.y + 5f + i;
+                yPOS = i + spawnedHeight;
                 GameObject newlySpawned = Instantiate(toppings[Random.Range(0, (int)Toppings.COUNT)], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
                 upSpawned.Add(newlySpawned);
             }
 
         }
 
-        //spawnedHeight += transform.position.y + amount;
+        spawnedHeight += amount;
     }
 
     public void SpawnCondiments() 

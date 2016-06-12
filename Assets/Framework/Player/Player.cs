@@ -73,6 +73,8 @@ public class Player : MonoBehaviour {
     public Text heightTracker;
     public GameObject multiplierTracker;
 
+    int score;
+
     public Button replayBtn;
 
     public Image listDisplay;
@@ -80,6 +82,8 @@ public class Player : MonoBehaviour {
     public GameObject toaster;
     public GameObject plateAndBread;
 
+    public GameObject endPoint;
+    public Camera pictureCam;
 
     private List<bool> toppingCollected = new List<bool>();
     private List<bool> condimentCollected = new List<bool>();
@@ -97,6 +101,7 @@ public class Player : MonoBehaviour {
         }
         //Set our current level to this levelController.
         instance = this;
+        score = 0;
     }
 
     void Start()
@@ -107,7 +112,7 @@ public class Player : MonoBehaviour {
 
     void Update() 
     {
-      
+       
         if (!LevelController.instance.isPlaying)
         {
             return;
@@ -227,6 +232,12 @@ public class Player : MonoBehaviour {
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[0];
                
                 player.transform.FindChild("Mesh").rotation = new Quaternion(-0.7f, 0f, 0f, 0.7f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(0f, -1f, 0f, 0f);
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[0];
+                endPoint.GetComponent<MeshRenderer>().material = materials[0];
+
                 break;
 
             case "bagel":
@@ -234,6 +245,108 @@ public class Player : MonoBehaviour {
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
                 
                 player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp1":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp2":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp3":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp4":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp5":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp6":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp7":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "temp8":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
                 break;
         }
            
@@ -444,12 +557,13 @@ public class Player : MonoBehaviour {
         }
         
 
-       // score += amount * bonusMultiplier;
-       // scoreTracker.text = score + " pts";
+       score += amount * bonusMultiplier;
+       scoreTracker.text = score + " pts";
     }
 
     public void MultiplyScore(float distance) 
     {
+
         if (distance > 10f)
         {
             scoreTracker.text = "You Missed the Plate!";
@@ -458,9 +572,17 @@ public class Player : MonoBehaviour {
         {
             int accuracy = (100 - (int)(distance * 100f));
 
-           // score *= accuracy;
-           // scoreTracker.text = score + " pts";
+           score *= accuracy;
+           scoreTracker.text = score + " pts";
         }
+
+        SetCamera();
+    }
+
+    void SetCamera()
+    {
+        pictureCam.depth = 5;
+        pictureCam.transform.FindChild("pictureRenderer").gameObject.SetActive(true);
     }
 
     

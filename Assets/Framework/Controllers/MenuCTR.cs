@@ -13,6 +13,7 @@ public class MenuCTR : MonoBehaviour {
     public GameObject gameUI;
     public GameObject titleUI;
     public GameObject charSelectUI;
+    public Text txt_Char_Name;
 
     bool isSoundOn = false;
 
@@ -94,6 +95,7 @@ public class MenuCTR : MonoBehaviour {
         }
         currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], plateCenter.position, Quaternion.identity) as GameObject;
         CharSelect(selectedChar[currentCharacterIndex]);
+        txt_Char_Name.text = selectedChar[currentCharacterIndex];
     }
 
     public void CharSelect(string sel) 
