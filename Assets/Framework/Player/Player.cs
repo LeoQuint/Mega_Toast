@@ -190,8 +190,8 @@ public class Player : MonoBehaviour {
 
         rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -2f, 2f), Mathf.Clamp(rb.velocity.y, -30f, 30f), 0f);
 
-        Vector3 clampedX = new Vector3(Mathf.Clamp(transform.position.x, -1.2f, 1.2f), transform.position.y, transform.position.z);
-        transform.position = clampedX;
+        Vector3 clampedX = new Vector3(Mathf.Clamp(player.transform.position.x, -1.2f, 1.2f), player.transform.position.y, player.transform.position.z);
+        player.transform.position = clampedX;
 
         if (rb.velocity.y < -2f && playerStatus == Status.GOINGUP)
         {

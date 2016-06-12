@@ -25,6 +25,7 @@ public class Foods : MonoBehaviour {
             if (typeTopping == Toppings.Egg)
             {
                 gameObject.transform.localRotation = Quaternion.Euler(180f, Random.Range(0f, 355f), 0f);
+                
             }
             else 
             {

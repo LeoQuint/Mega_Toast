@@ -173,6 +173,8 @@ public class LevelController : MonoBehaviour {
         li_2.sprite = cSprites[(int)selectedCondiments[1]];
         li_3.sprite = cSprites[(int)selectedCondiments[2]];
 
+
+
         SetCheckMarks(999);
 
         foreach (GameObject g in upSpawned)
