@@ -8,13 +8,14 @@ public class ImageProcessor : MonoBehaviour {
     float angle;
     Vector2 angleVec;
     
-
+    public Texture targetTexture;
 	// Use this for initialization
 	void Start () 
     {
         webcamTexture = new WebCamTexture();
         Renderer renderer = GetComponent<Renderer>();
         renderer.material.mainTexture = webcamTexture;
+        //targetTexture = webcamTexture;
         webcamTexture.Play();
         angle = (float)(webcamTexture.videoRotationAngle + 180);
 

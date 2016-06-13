@@ -72,6 +72,7 @@ public class LevelController : MonoBehaviour {
 
     void Start() 
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         //Gather all resources needed in this level.
         BuildLevel();
         

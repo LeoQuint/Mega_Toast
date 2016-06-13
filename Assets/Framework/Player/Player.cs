@@ -72,6 +72,8 @@ public class Player : MonoBehaviour {
     public Text scoreTracker;
     public Text heightTracker;
     public GameObject multiplierTracker;
+    public GameObject picMenu;
+    public GameObject GameUI;
 
     int score;
 
@@ -83,7 +85,8 @@ public class Player : MonoBehaviour {
     public GameObject plateAndBread;
 
     public GameObject endPoint;
-    public Camera pictureCam;
+
+    public Camera playerPictureCam;
 
     private List<bool> toppingCollected = new List<bool>();
     private List<bool> condimentCollected = new List<bool>();
@@ -222,6 +225,8 @@ public class Player : MonoBehaviour {
         }
 
     }
+
+
 
     public void ChangeModel(string bread) 
     {
@@ -385,21 +390,22 @@ public class Player : MonoBehaviour {
 
     public void Jump()
     {
-        if (playerStatus == Status.CHARGING)
+        if (playerStatus != Status.CHARGING)
         {
+            return;
+        }
             playerStatus = Status.GOINGUP;
             powerBar.GetComponent<PowerBar>().hasLaunched = true;
             StartCoroutine(DisplayPower());
             //speedTracker.gameObject.SetActive(true);
             //heightTracker.gameObject.SetActive(true);
             scoreTracker.gameObject.SetActive(true);
-            float forceAdded = 1f * Mathf.Pow((0.5f), (1f - powerBar.value));
+            float forceAdded = jumpForce * Mathf.Pow((0.5f), (1f - powerBar.value));
 
-            GetComponent<Rigidbody>().AddForce(new Vector3(0f, forceAdded, 0f));
+            rb.AddForce(new Vector3(0f, forceAdded, 0f));
             stepEndRotation = upRotation;
             StartCoroutine(Wait(1f));
-            launchBtn.gameObject.SetActive(false);
-        }
+        
     }
     void Flip()
     {
@@ -485,12 +491,12 @@ public class Player : MonoBehaviour {
         if (playerStatus == Status.OVERHEAD)
         {
             dir.x = -Input.acceleration.x;
-            dir.z = -Input.acceleration.y;
+           // dir.z = -Input.acceleration.y;
         }
         else 
         {
             dir.x = Input.acceleration.x;
-            dir.z = Input.acceleration.y;
+           // dir.z = Input.acceleration.y;
         }
         
 
@@ -581,8 +587,11 @@ public class Player : MonoBehaviour {
 
     void SetCamera()
     {
-        pictureCam.depth = 5;
-        pictureCam.transform.FindChild("pictureRenderer").gameObject.SetActive(true);
+        picMenu.SetActive(true);
+        GameUI.SetActive(false);
+ 
+        playerPictureCam.depth = 6;
+        playerPictureCam.gameObject.SetActive(true);
     }
 
     
