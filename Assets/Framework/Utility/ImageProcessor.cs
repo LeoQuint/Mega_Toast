@@ -17,7 +17,7 @@ public class ImageProcessor : MonoBehaviour {
         renderer.material.mainTexture = webcamTexture;
         //targetTexture = webcamTexture;
         webcamTexture.Play();
-        angle = (float)(webcamTexture.videoRotationAngle + 180);
+        angle = (float)(webcamTexture.videoRotationAngle);
 
         gameObject.transform.Rotate(Vector3.forward, angle);
 	}

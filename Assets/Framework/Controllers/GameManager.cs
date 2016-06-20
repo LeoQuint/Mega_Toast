@@ -42,7 +42,10 @@ public class GameManager : MonoBehaviour {
 
     }
 
-
+    public void Load(int level)
+    {
+        SceneManager.LoadScene(level);
+    }
 
    
 }
