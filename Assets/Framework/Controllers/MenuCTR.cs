@@ -115,6 +115,15 @@ public class MenuCTR : MonoBehaviour {
         player.GetComponent<Player>().StartGame();
     }
 
+    public void ShowAchievements()
+    {
+        GameCenterLoading.instance.ShowAchievements();
+    }
+    public void ShowLeaderboard()
+    {
+        GameCenterLoading.instance.ShowLeaderboard();
+    }
+
 
     #region Settings
     //toggle sound on/off

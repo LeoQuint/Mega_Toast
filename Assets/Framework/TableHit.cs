@@ -10,7 +10,7 @@ public class TableHit : MonoBehaviour {
             other.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
             float offset = ((float)(other.gameObject.transform.FindChild("GatherLocation").childCount)) / 60f;
             other.transform.position = new Vector3(other.transform.position.x,  offset, other.transform.position.z);
-            other.GetComponent<Player>().playerStatus = Status.LANDED;
+            other.GetComponent<Player>().playerStatus = PlayerStatus.LANDED;
             other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY;
 
          

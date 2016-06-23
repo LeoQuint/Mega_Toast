@@ -1,13 +1,38 @@
 ﻿using UnityEngine;
 using UnityEngine.SocialPlatforms;
-
-//using UnityEngine.SocialPlatforms.GameCenter;
+using UnityEngine.SocialPlatforms.GameCenter;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class GameCenterLoading : MonoBehaviour
 {
 
+    public static GameCenterLoading instance = null;
+
+    void Awake()
+    {
+        //Check if instance already exists
+        if (instance == null)
+        {
+            //if not, set instance to this
+            instance = this;
+        }
+        //If instance already exists and it's not this:
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        //Sets this to not be destroyed when reloading scene
+        DontDestroyOnLoad(gameObject);
+
+    }
+
     void Start()
     {
+   
+        // Activate the Google Play Games platform
+        PlayGamesPlatform.Activate();
         // Authenticate and register a ProcessAuthentication callback
         // This call needs to be made before we can proceed to other calls in the Social API
         Social.localUser.Authenticate(ProcessAuthentication);
@@ -44,13 +69,29 @@ public class GameCenterLoading : MonoBehaviour
             Debug.Log("Error: no achievements found");
         else
             Debug.Log("Got " + achievements.Length + " achievements");
+    }
 
-        // You can also call into the functions like this
-        Social.ReportProgress("Achievement01", 100.0, result => {
-            if (result)
-                Debug.Log("Successfully reported achievement progress");
-            else
-                Debug.Log("Failed to report achievement");
+    public void UnlockAchievement(string achievementID)
+    {
+        Social.ReportProgress(achievementID, 100.0f, (bool success) => {
+            // handle success or failure
         });
     }
+    public void RevealAchievement(string achievementID)
+    {
+        Social.ReportProgress(achievementID, 0.0f, (bool success) => {
+            // handle success or failure
+        });
+    }
+
+    public void ShowAchievements()
+    {
+        Social.ShowAchievementsUI();
+    }
+    public void ShowLeaderboard()
+    {
+        Social.ShowLeaderboardUI();
+    }
+
+
 }

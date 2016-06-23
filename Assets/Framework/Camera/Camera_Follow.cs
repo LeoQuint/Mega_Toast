@@ -51,7 +51,7 @@ public class Camera_Follow : MonoBehaviour {
         {
             return;
         }*/
-        if (pScript.playerStatus == Status.LANDED || pScript.playerStatus == Status.DEAD)
+        if (pScript.playerStatus == PlayerStatus.LANDED || pScript.playerStatus == PlayerStatus.DEAD)
         {
             return;
         }
@@ -61,7 +61,7 @@ public class Camera_Follow : MonoBehaviour {
         }
         if (target != null)
         {
-            if (pScript.playerStatus == Status.GOINGDOWN && transform.position.y < 15f)
+            if (pScript.playerStatus == PlayerStatus.GOINGDOWN && transform.position.y < 15f)
             {
 
                 if (!asFliped)
@@ -76,7 +76,7 @@ public class Camera_Follow : MonoBehaviour {
 
                 return;
             }
-            else if (pScript.playerStatus == Status.OVERHEAD)
+            else if (pScript.playerStatus == PlayerStatus.OVERHEAD)
             {
                 return;
             }

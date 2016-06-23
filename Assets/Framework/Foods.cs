@@ -38,7 +38,7 @@ public class Foods : MonoBehaviour {
             other.gameObject.GetComponent<BoxCollider>().size = new Vector3(colliderSize.x, colliderSize.y + 0.001f, colliderSize.z);
             
         }
-        if (pepper &&  Player.instance.playerStatus == Status.GOINGUP)
+        if (pepper &&  Player.instance.playerStatus == PlayerStatus.GOINGUP)
         {
             Player.instance.PepperBonus();
         }

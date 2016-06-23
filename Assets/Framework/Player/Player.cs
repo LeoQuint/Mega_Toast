@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using NS_Level;
 
-public enum Status 
+public enum PlayerStatus 
 {
     INTRO,
     CHARGING,
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour {
     [SerializeField]
     float flipDelay = 0.5f;
   
-    public Status playerStatus;
+    public PlayerStatus playerStatus;
 
     Quaternion upRotation = new Quaternion(0f, 0f, 0f, 1f);
     Quaternion downRotation = new Quaternion(-1f, 0f, 0f, 0f);
@@ -124,12 +124,12 @@ public class Player : MonoBehaviour {
         {
             return;
         }
-        if (playerStatus == Status.LANDED || playerStatus == Status.DEAD)
+        if (playerStatus == PlayerStatus.LANDED || playerStatus == PlayerStatus.DEAD)
         {
             replayBtn.gameObject.SetActive(true);
             return;
         }
-        if (playerStatus == Status.INTRO)
+        if (playerStatus == PlayerStatus.INTRO)
         {
             return;
         }
@@ -149,12 +149,12 @@ public class Player : MonoBehaviour {
 
         
 
-        if (playerStatus == Status.CHARGING)
+        if (playerStatus == PlayerStatus.CHARGING)
         {
             
             if (Input.GetAxis("Jump") > 0)
             {
-                playerStatus = Status.GOINGUP;
+                playerStatus = PlayerStatus.GOINGUP;
                 powerBar.GetComponent<PowerBar>().hasLaunched = true;
                 StartCoroutine(DisplayPower());
                 //speedTracker.gameObject.SetActive(true);
@@ -171,7 +171,7 @@ public class Player : MonoBehaviour {
         }
        
 
-        if (playerStatus == Status.OVERHEAD)
+        if (playerStatus == PlayerStatus.OVERHEAD)
         {
             if (enableTiltControls)
             {
@@ -201,9 +201,9 @@ public class Player : MonoBehaviour {
         Vector3 clampedX = new Vector3(Mathf.Clamp(player.transform.position.x, -1.2f, 1.2f), player.transform.position.y, player.transform.position.z);
         player.transform.position = clampedX;
 
-        if (rb.velocity.y < -2f && playerStatus == Status.GOINGUP)
+        if (rb.velocity.y < -2f && playerStatus == PlayerStatus.GOINGUP)
         {
-            playerStatus = Status.GOINGDOWN;
+            playerStatus = PlayerStatus.GOINGDOWN;
 
             stepStartTime = Time.time;
             stepStartRotation = upRotation;
@@ -370,7 +370,7 @@ public class Player : MonoBehaviour {
             condimentCollected.Add(false);
         }
 
-        playerStatus = Status.INTRO;
+        playerStatus = PlayerStatus.INTRO;
         rb.isKinematic = false;
 
         StartCoroutine(DelayBreadLoading());
@@ -381,7 +381,7 @@ public class Player : MonoBehaviour {
         
 
         yield return new WaitForSeconds(2f);
-        playerStatus = Status.CHARGING;
+        playerStatus = PlayerStatus.CHARGING;
         hasStarted = true;
         powerBar.gameObject.SetActive(true);
         listDisplay.gameObject.SetActive(true);
@@ -390,11 +390,11 @@ public class Player : MonoBehaviour {
 
     public void Jump()
     {
-        if (playerStatus != Status.CHARGING)
+        if (playerStatus != PlayerStatus.CHARGING)
         {
             return;
         }
-            playerStatus = Status.GOINGUP;
+            playerStatus = PlayerStatus.GOINGUP;
             powerBar.GetComponent<PowerBar>().hasLaunched = true;
             StartCoroutine(DisplayPower());
             //speedTracker.gameObject.SetActive(true);
@@ -463,7 +463,7 @@ public class Player : MonoBehaviour {
         {
             child.parent = null;
         }
-        playerStatus = Status.DEAD;
+        playerStatus = PlayerStatus.DEAD;
     }
 
  
@@ -472,7 +472,7 @@ public class Player : MonoBehaviour {
 
     public void ChangeToOverhead() 
     {
-        playerStatus = Status.OVERHEAD;
+        playerStatus = PlayerStatus.OVERHEAD;
         foreach (bool b in condimentCollected)
         {
             if (!b)
@@ -488,7 +488,7 @@ public class Player : MonoBehaviour {
     {
         Vector3 dir = Vector3.zero;
 
-        if (playerStatus == Status.OVERHEAD)
+        if (playerStatus == PlayerStatus.OVERHEAD)
         {
             dir.x = -Input.acceleration.x;
            // dir.z = -Input.acceleration.y;
