@@ -7,7 +7,7 @@ public class Foods : MonoBehaviour {
     public Toppings typeTopping;
     public Condiments typeCondiment;
 
-    public int pointValue = 10;
+    public int pointValue = 1;
     
     void OnTriggerEnter(Collider other)
     {

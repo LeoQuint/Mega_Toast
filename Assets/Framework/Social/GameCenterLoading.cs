@@ -3,6 +3,7 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.SocialPlatforms.GameCenter;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using UnityEngine.SceneManagement;
 
 public class GameCenterLoading : MonoBehaviour
 {
@@ -30,7 +31,16 @@ public class GameCenterLoading : MonoBehaviour
 
     void Start()
     {
-   
+
+
+
+
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        // enables saving game progress.
+        .EnableSavedGames()
+        .Build();
+
+        PlayGamesPlatform.InitializeInstance(config);
         // Activate the Google Play Games platform
         PlayGamesPlatform.Activate();
         // Authenticate and register a ProcessAuthentication callback
@@ -54,12 +64,16 @@ public class GameCenterLoading : MonoBehaviour
         if (success)
         {
             Debug.Log("Authenticated, checking achievements");
-
+            SceneManager.LoadScene(1);
             // Request loaded achievements, and register a callback for processing them
             Social.LoadAchievements(ProcessLoadedAchievements);
         }
         else
+        {
             Debug.Log("Failed to authenticate");
+            SceneManager.LoadScene(1);
+        }
+            
     }
 
     // This function gets called when the LoadAchievement call completes
@@ -83,7 +97,27 @@ public class GameCenterLoading : MonoBehaviour
             // handle success or failure
         });
     }
+    public void AddProgressToCompletedSand()
+    {
 
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQBA", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQBQ", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQBg", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQBw", 1, (bool success) => {
+            // handle success or failure
+        });
+    }
+  
     public void ShowAchievements()
     {
         Social.ShowAchievementsUI();
@@ -91,6 +125,12 @@ public class GameCenterLoading : MonoBehaviour
     public void ShowLeaderboard()
     {
         Social.ShowLeaderboardUI();
+    }
+    public void PostToLeaderboard(int score)
+    {
+        Social.ReportScore(score, "CgkI09G1lLUQEAIQHA", (bool success) => {
+            // handle success or failure
+        });
     }
 
 

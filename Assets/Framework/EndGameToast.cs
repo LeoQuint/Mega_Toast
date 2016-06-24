@@ -16,7 +16,9 @@ public class EndGameToast : MonoBehaviour {
             float distance = Mathf.Abs(transform.position.x - other.transform.position.x) + Mathf.Abs(transform.position.z - other.transform.position.z);
 
             Player.instance.MultiplyScore(distance);
-           
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQAg");
         }
+
+       
     }
 }

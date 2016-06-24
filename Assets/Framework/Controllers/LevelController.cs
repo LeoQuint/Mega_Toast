@@ -248,6 +248,6 @@ public class LevelController : MonoBehaviour {
 
     public void Replay()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }

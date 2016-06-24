@@ -565,6 +565,7 @@ public class Player : MonoBehaviour {
 
        score += amount * bonusMultiplier;
        scoreTracker.text = score + " pts";
+       CheckScoreAchievement();
     }
 
     public void MultiplyScore(float distance) 
@@ -573,16 +574,18 @@ public class Player : MonoBehaviour {
         if (distance > 10f)
         {
             scoreTracker.text = "You Missed the Plate!";
+            //score = 0;
         }
         else
         {
             int accuracy = (100 - (int)(distance * 100f));
 
-           score *= accuracy;
+           //score *= accuracy;
            scoreTracker.text = score + " pts";
+           CheckScoreAchievement();
         }
 
-        SetCamera();
+        //SetCamera();
     }
 
     void SetCamera()
@@ -594,6 +597,34 @@ public class Player : MonoBehaviour {
         playerPictureCam.gameObject.SetActive(true);
     }
 
-    
+    public void CheckScoreAchievement()
+    {
+        if (score >= 100)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQCA");
+            GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQCQ");
+        }
+        if (score >= 200)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQCQ");
+            GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQCg");
+        }
+        if (score >= 300)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQCg");
+            GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQCw");
+        }
+        if (score >= 400)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQCw");
+            GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQDA");
+        }
+        if (score >= 500)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQDA");
+        }
+    }
 
 }
+
+
