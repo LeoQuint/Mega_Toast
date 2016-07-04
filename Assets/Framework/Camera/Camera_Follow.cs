@@ -45,12 +45,6 @@ public class Camera_Follow : MonoBehaviour {
 	void FixedUpdate () 
     {
 
-   
-
-       /* if (GameManager.instance.appStatus != AppStatus.PLAYING)
-        {
-            return;
-        }*/
         if (pScript.playerStatus == PlayerStatus.LANDED || pScript.playerStatus == PlayerStatus.DEAD)
         {
             return;
@@ -66,11 +60,13 @@ public class Camera_Follow : MonoBehaviour {
 
                 if (!asFliped)
                 {
+                   
                     asFliped = true;
                     mDel += Flip;
+                    Time.timeScale = 0.3f;
                     stepStartTime = Time.time;
                     endPos = transform.position + overHeadPos;
-                    //pScript.ChangeToOverhead();
+                 
                     playerRb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 }
 
@@ -104,7 +100,7 @@ public class Camera_Follow : MonoBehaviour {
 
     void Flip()
     {
-
+        
         float step = (Time.time - stepStartTime) / flipDuration;
         transform.rotation = Quaternion.Lerp(startingRot, overHeadRot, step);
 
@@ -117,6 +113,7 @@ public class Camera_Follow : MonoBehaviour {
             if (overHeadFollow)
             {
                 mDel += OverHeadFollow;
+                Time.timeScale = 1f;
             }
         }
     }

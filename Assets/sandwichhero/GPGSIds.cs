@@ -25,7 +25,7 @@ namespace sandwichhero
 {
 public static class GPGSIds
 {
-        public const string achievement_make_your_first_sandwich = "CgkI09G1lLUQEAIQAg"; // <GPGSID>
+        public const string achievement_make_your_first_sandwich = "CgkIm8DKqdILEAIQAg"; // <GPGSID>
 
 }
 }

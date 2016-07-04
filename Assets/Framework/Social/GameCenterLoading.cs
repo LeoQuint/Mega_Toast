@@ -4,11 +4,14 @@ using UnityEngine.SocialPlatforms.GameCenter;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameCenterLoading : MonoBehaviour
 {
 
     public static GameCenterLoading instance = null;
+    public bool isConnected = false;
+
 
     void Awake()
     {
@@ -32,48 +35,59 @@ public class GameCenterLoading : MonoBehaviour
     void Start()
     {
 
-
-
-
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-        // enables saving game progress.
-        .EnableSavedGames()
-        .Build();
-
-        PlayGamesPlatform.InitializeInstance(config);
-        // Activate the Google Play Games platform
         PlayGamesPlatform.Activate();
         // Authenticate and register a ProcessAuthentication callback
         // This call needs to be made before we can proceed to other calls in the Social API
         Social.localUser.Authenticate(ProcessAuthentication);
     }
 
-    void Update() {
-        if(Input.GetKeyDown(KeyCode.A))
-        Social.ShowAchievementsUI();
-        if (Input.GetKeyDown(KeyCode.L))
-            Social.ShowLeaderboardUI();
+
+    public void RetryConnection()
+    {
+        StartCoroutine(WaitForRetry());
     }
 
+    IEnumerator WaitForRetry()
+    {
+        yield return new WaitForSeconds(1f);
+        if (!isConnected)
+        {
+            Social.localUser.Authenticate(ProcessAuthentication);
+        }
+    }
 
 
     // This function gets called when Authenticate completes
     // Note that if the operation is successful, Social.localUser will contain data from the server. 
     void ProcessAuthentication(bool success)
     {
+        Scene scene = SceneManager.GetActiveScene();
         if (success)
         {
+            isConnected = true;
             Debug.Log("Authenticated, checking achievements");
-            SceneManager.LoadScene(1);
             // Request loaded achievements, and register a callback for processing them
             Social.LoadAchievements(ProcessLoadedAchievements);
+            if (scene.name == "loading")
+            {
+                LoadMainScene();
+            }       
         }
         else
         {
+            isConnected = false;
             Debug.Log("Failed to authenticate");
-            SceneManager.LoadScene(1);
+            if (scene.name == "loading")
+            {
+                LoadMainScene();
+            }
         }
-            
+
+    }
+
+    void LoadMainScene()
+    {
+        SceneManager.LoadScene(1);
     }
 
     // This function gets called when the LoadAchievement call completes
@@ -99,9 +113,9 @@ public class GameCenterLoading : MonoBehaviour
     }
     public void AddProgressToCompletedSand()
     {
-
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQBA", 1, (bool success) => {
+        UnlockAchievement("CgkIm8DKqdILEAIQAg");
+       /* PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkIm8DKqdILEAIQAg", 1, (bool success) => {
             // handle success or failure
         });
         PlayGamesPlatform.Instance.IncrementAchievement(
@@ -115,16 +129,75 @@ public class GameCenterLoading : MonoBehaviour
         PlayGamesPlatform.Instance.IncrementAchievement(
         "CgkI09G1lLUQEAIQBw", 1, (bool success) => {
             // handle success or failure
+        });*/
+    }
+
+    public void AddProgressToPerfectLaunch()
+    {
+        UnlockAchievement("CgkI09G1lLUQEAIQEg");
+        RevealAchievement("CgkI09G1lLUQEAIQEw");
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQEw", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQFA", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQFQ", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQFg", 1, (bool success) => {
+            // handle success or failure
         });
     }
-  
+
+    public void AddProgressToPerfectLanding()
+    {
+        UnlockAchievement("CgkI09G1lLUQEAIQFw");
+        RevealAchievement("CgkI09G1lLUQEAIQGA");
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQGA", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQGQ", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQGg", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkI09G1lLUQEAIQGw", 1, (bool success) => {
+            // handle success or failure
+        });
+    }
+
+
     public void ShowAchievements()
     {
-        Social.ShowAchievementsUI();
+        if (isConnected)
+        {
+            Social.ShowAchievementsUI();
+        }
+        else
+        {
+            Social.localUser.Authenticate(ProcessAuthentication);
+        }
     }
     public void ShowLeaderboard()
     {
-        Social.ShowLeaderboardUI();
+        if (isConnected)
+        {
+            Social.ShowLeaderboardUI();
+        }
+        else
+        {
+            Social.localUser.Authenticate(ProcessAuthentication);
+        }
     }
     public void PostToLeaderboard(int score)
     {

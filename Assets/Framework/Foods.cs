@@ -18,7 +18,8 @@ public class Foods : MonoBehaviour {
             Destroy(GetComponent<BoxCollider>());
             gameObject.transform.SetParent(other.gameObject.transform.FindChild("GatherLocation"));
             gameObject.transform.rotation = transform.parent.rotation;
-            float offset = ((float)(other.gameObject.transform.FindChild("GatherLocation").childCount)) / 600f;
+            int childCount = other.gameObject.transform.FindChild("GatherLocation").childCount;
+            float offset = ((float)(childCount)) / 600f;
             
             gameObject.transform.localPosition = new Vector3(0f, offset, 0f);
 
@@ -36,7 +37,9 @@ public class Foods : MonoBehaviour {
             Vector3 colliderSize = other.gameObject.GetComponent<BoxCollider>().size;
             other.gameObject.GetComponent<BoxCollider>().center = new Vector3(center.x, center.y + 0.001f, center.z);
             other.gameObject.GetComponent<BoxCollider>().size = new Vector3(colliderSize.x, colliderSize.y + 0.001f, colliderSize.z);
-            
+
+            Player.instance.CheckToppingAchievement(childCount);
+
         }
         if (pepper &&  Player.instance.playerStatus == PlayerStatus.GOINGUP)
         {

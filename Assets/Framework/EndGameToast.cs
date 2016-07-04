@@ -13,7 +13,7 @@ public class EndGameToast : MonoBehaviour {
             Player.instance.playerStatus = PlayerStatus.LANDED;
             other.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezePositionY;
 
-            float distance = Mathf.Abs(transform.position.x - other.transform.position.x) + Mathf.Abs(transform.position.z - other.transform.position.z);
+            float distance = Mathf.Abs(transform.position.x - other.transform.position.x);
 
             Player.instance.MultiplyScore(distance);
             GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQAg");

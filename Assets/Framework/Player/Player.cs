@@ -95,6 +95,8 @@ public class Player : MonoBehaviour {
 
     bool hasStarted = false;
 
+    public int pepperCollected = 0;
+
     void Awake()
     {
         //Instance gets removed by any new instance created.
@@ -111,6 +113,7 @@ public class Player : MonoBehaviour {
     {
         rb = player.GetComponent<Rigidbody>();
         rb.isKinematic = true;
+        pepperCollected = 0;
     }
 
     void Update() 
@@ -154,17 +157,7 @@ public class Player : MonoBehaviour {
             
             if (Input.GetAxis("Jump") > 0)
             {
-                playerStatus = PlayerStatus.GOINGUP;
-                powerBar.GetComponent<PowerBar>().hasLaunched = true;
-                StartCoroutine(DisplayPower());
-                //speedTracker.gameObject.SetActive(true);
-                //heightTracker.gameObject.SetActive(true);
-                scoreTracker.gameObject.SetActive(true);
-                float forceAdded = jumpForce * Mathf.Pow( (0.5f), (1f - powerBar.value) );
-               
-                rb.AddForce(new Vector3(0f, forceAdded, 0f));
-                stepEndRotation = upRotation;
-                StartCoroutine(Wait(1f));
+                Jump();
             }
             
 
@@ -201,7 +194,7 @@ public class Player : MonoBehaviour {
         Vector3 clampedX = new Vector3(Mathf.Clamp(player.transform.position.x, -1.2f, 1.2f), player.transform.position.y, player.transform.position.z);
         player.transform.position = clampedX;
 
-        if (rb.velocity.y < -2f && playerStatus == PlayerStatus.GOINGUP)
+        if (rb.velocity.y < -0.1f && playerStatus == PlayerStatus.GOINGUP)
         {
             playerStatus = PlayerStatus.GOINGDOWN;
 
@@ -400,8 +393,12 @@ public class Player : MonoBehaviour {
             //speedTracker.gameObject.SetActive(true);
             //heightTracker.gameObject.SetActive(true);
             scoreTracker.gameObject.SetActive(true);
+            
             float forceAdded = jumpForce * Mathf.Pow((0.5f), (1f - powerBar.value));
-
+            if (powerBar.value > 0.99f)
+            {
+                GameCenterLoading.instance.AddProgressToPerfectLaunch();
+            }
             rb.AddForce(new Vector3(0f, forceAdded, 0f));
             stepEndRotation = upRotation;
             StartCoroutine(Wait(1f));
@@ -481,6 +478,7 @@ public class Player : MonoBehaviour {
                 return;
             }
         }
+        
     }
 
 
@@ -512,6 +510,11 @@ public class Player : MonoBehaviour {
     public void PepperBonus() 
     {
         rb.AddForce(Vector3.up * 1f);
+        pepperCollected++;
+        if (pepperCollected == 10)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQHQ");
+        }
         //transform.FindChild("Emmiter").gameObject.SetActive(true);
         //StartCoroutine(DisplayEmitter());
     }
@@ -565,9 +568,9 @@ public class Player : MonoBehaviour {
 
        score += amount * bonusMultiplier;
        scoreTracker.text = score + " pts";
-       CheckScoreAchievement();
+      // CheckScoreAchievement();
     }
-
+    //also end point
     public void MultiplyScore(float distance) 
     {
 
@@ -580,9 +583,16 @@ public class Player : MonoBehaviour {
         {
             int accuracy = (100 - (int)(distance * 100f));
 
-           //score *= accuracy;
-           scoreTracker.text = score + " pts";
-           CheckScoreAchievement();
+            if (distance < 0.1f)
+            {
+               // GameCenterLoading.instance.AddProgressToPerfectLanding();
+            }
+
+            //score *= accuracy;
+            scoreTracker.text = score + " pts";
+           // CheckScoreAchievement();
+            GameCenterLoading.instance.AddProgressToCompletedSand();
+           // GameCenterLoading.instance.PostToLeaderboard(score);
         }
 
         //SetCamera();
@@ -623,6 +633,33 @@ public class Player : MonoBehaviour {
         {
             GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQDA");
         }
+    }
+
+    public void CheckToppingAchievement(int count)
+    {
+/*
+        switch (count)
+        {
+            case 10:
+                GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQDQ");
+                GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQEA");
+                break;
+            case 15:
+                GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQEA");
+                GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQDg");
+                break;
+            case 20:
+                GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQDg");
+                GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQEQ");
+                break;
+            case 25:
+                GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQEQ");
+                GameCenterLoading.instance.RevealAchievement("CgkI09G1lLUQEAIQDw");
+                break;
+            case 30:
+                GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQDw");
+                break;
+        }*/
     }
 
 }
