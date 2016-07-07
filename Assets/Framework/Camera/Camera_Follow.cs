@@ -63,7 +63,7 @@ public class Camera_Follow : MonoBehaviour {
                    
                     asFliped = true;
                     mDel += Flip;
-                    Time.timeScale = 0.3f;
+                    Time.timeScale = 0.25f;
                     stepStartTime = Time.time;
                     endPos = transform.position + overHeadPos;
                  

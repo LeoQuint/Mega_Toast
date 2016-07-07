@@ -34,8 +34,12 @@ public class GameCenterLoading : MonoBehaviour
 
     void Start()
     {
-
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
+
+        
         // Authenticate and register a ProcessAuthentication callback
         // This call needs to be made before we can proceed to other calls in the Social API
         Social.localUser.Authenticate(ProcessAuthentication);
@@ -114,28 +118,28 @@ public class GameCenterLoading : MonoBehaviour
     public void AddProgressToCompletedSand()
     {
         UnlockAchievement("CgkIm8DKqdILEAIQAg");
-       /* PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkIm8DKqdILEAIQAg", 1, (bool success) => {
+        PlayGamesPlatform.Instance.IncrementAchievement(
+        "CgkIm8DKqdILEAIQBA", 1, (bool success) => {
             // handle success or failure
         });
         PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQBQ", 1, (bool success) => {
+        "CgkIm8DKqdILEAIQBQ", 1, (bool success) => {
             // handle success or failure
         });
         PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQBg", 1, (bool success) => {
+        "CgkIm8DKqdILEAIQBg", 1, (bool success) => {
             // handle success or failure
         });
         PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQBw", 1, (bool success) => {
+        "CgkIm8DKqdILEAIQBw", 1, (bool success) => {
             // handle success or failure
-        });*/
+        });
     }
 
     public void AddProgressToPerfectLaunch()
     {
-        UnlockAchievement("CgkI09G1lLUQEAIQEg");
-        RevealAchievement("CgkI09G1lLUQEAIQEw");
+        UnlockAchievement("CgkIm8DKqdILEAIQEg");
+       /* RevealAchievement("CgkI09G1lLUQEAIQEw");
         PlayGamesPlatform.Instance.IncrementAchievement(
         "CgkI09G1lLUQEAIQEw", 1, (bool success) => {
             // handle success or failure
@@ -151,7 +155,7 @@ public class GameCenterLoading : MonoBehaviour
         PlayGamesPlatform.Instance.IncrementAchievement(
         "CgkI09G1lLUQEAIQFg", 1, (bool success) => {
             // handle success or failure
-        });
+        });*/
     }
 
     public void AddProgressToPerfectLanding()
@@ -199,11 +203,22 @@ public class GameCenterLoading : MonoBehaviour
             Social.localUser.Authenticate(ProcessAuthentication);
         }
     }
-    public void PostToLeaderboard(int score)
+    public void PostToLeaderboard(int score, int leaderboard)
     {
-        Social.ReportScore(score, "CgkI09G1lLUQEAIQHA", (bool success) => {
-            // handle success or failure
-        });
+        switch (leaderboard)
+        {
+            case 1:
+                Social.ReportScore(score, "CgkIm8DKqdILEAIQEw", (bool success) => {
+                    // handle success or failure
+                });
+            break;
+            case 2:
+                Social.ReportScore(score, "CgkIm8DKqdILEAIQFA", (bool success) => {
+                    // handle success or failure
+                });
+            break;
+        }
+       
     }
 
 
