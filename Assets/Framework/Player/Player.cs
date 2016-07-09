@@ -46,11 +46,11 @@ public class Player : MonoBehaviour {
 
     public Mesh[] meshes;
     public Material[] materials;
-   
+
 
     /// OLD CODE
-    
-    
+
+    public int ptsRequiredPerCoin = 25;
 
     Quaternion stepStartRotation;
     Quaternion stepEndRotation;
@@ -72,12 +72,12 @@ public class Player : MonoBehaviour {
     public Text scoreTracker;
     public Text heightTracker;
     public GameObject multiplierTracker;
-    public GameObject picMenu;
+    public GameObject landingResult;
     public GameObject GameUI;
 
     int score;
 
-    public Button replayBtn;
+    public GameObject endMenu;
 
     public Image listDisplay;
     //Table
@@ -94,6 +94,7 @@ public class Player : MonoBehaviour {
     bool hasStarted = false;
 
     public int pepperCollected = 0;
+    private bool isEndGame = false;
 
     void Awake()
     {
@@ -106,14 +107,12 @@ public class Player : MonoBehaviour {
         instance = this;
         score = 0;
     }
-
     void Start()
     {
         rb = player.GetComponent<Rigidbody>();
         rb.isKinematic = true;
         pepperCollected = 0;
     }
-
     void Update() 
     {
        
@@ -127,23 +126,22 @@ public class Player : MonoBehaviour {
         }
         if (playerStatus == PlayerStatus.LANDED || playerStatus == PlayerStatus.DEAD)
         {
-            replayBtn.gameObject.SetActive(true);
+            if (!isEndGame)
+            {
+                isEndGame = true;
+                StartCoroutine(EndGameDelay());
+            }
+            
             return;
         }
         if (playerStatus == PlayerStatus.INTRO)
         {
             return;
         }
-        
-
-    
         if (mDel != null)
         {
             mDel();
         }
-
-        
-
         if (playerStatus == PlayerStatus.CHARGING)
         {
             
@@ -152,10 +150,7 @@ public class Player : MonoBehaviour {
                 Jump();
             }
             
-
         }
-       
-
         if (playerStatus == PlayerStatus.OVERHEAD)
         {
             if (enableTiltControls)
@@ -210,9 +205,6 @@ public class Player : MonoBehaviour {
         }
 
     }
-
-
-
     public void ChangeModel(string bread) 
     {
         switch(bread)
@@ -342,10 +334,10 @@ public class Player : MonoBehaviour {
            
    
     }
-
     public void StartGame() 
     {
-
+        toppingCollected.Clear();
+        condimentCollected.Clear();
         for (int i = 0; i < LevelController.instance.selectedToppings.Count; i++)
         {
             toppingCollected.Add(false);
@@ -360,7 +352,6 @@ public class Player : MonoBehaviour {
 
         StartCoroutine(DelayBreadLoading());
     }
-
     IEnumerator DelayBreadLoading()
     {
         
@@ -372,8 +363,6 @@ public class Player : MonoBehaviour {
         listDisplay.gameObject.SetActive(true);
         launchBtn.gameObject.SetActive(true);
     }
-
-
     public void Jump()
     {
         if (playerStatus != PlayerStatus.CHARGING)
@@ -410,7 +399,6 @@ public class Player : MonoBehaviour {
            // mDel -= MoveList;
         }
     }
-
     IEnumerator DisplayPower()
     {
         yield return new WaitForSeconds(2f);
@@ -425,24 +413,24 @@ public class Player : MonoBehaviour {
         SetTable();
         mDel += Flip;
     }
-
+    IEnumerator EndGameDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        endMenu.gameObject.SetActive(true);
+        landingResult.gameObject.SetActive(false);
+        GameUI.gameObject.SetActive(false);
+    }
     void SetTable()
     {
         toaster.SetActive(false);
         plateAndBread.SetActive(true);
     }
-
     /*List movement disabled
     void MoveList()
     {
         float step = (Time.time - stepStartTime) / flipDuration;
         listDisplay.transform.position = new Vector3(listDisplay.transform.position.x, (Screen.height * 0.8f) * step, 0f);
     }*/
-
-
-    
-   
-
     public void ExplosiveDeath() 
     {
         int childCount =  player.transform.FindChild("GatherLocation").childCount;
@@ -458,11 +446,6 @@ public class Player : MonoBehaviour {
         }
         playerStatus = PlayerStatus.DEAD;
     }
-
- 
-
-    
-
     public void ChangeToOverhead() 
     {
         playerStatus = PlayerStatus.OVERHEAD;
@@ -476,8 +459,6 @@ public class Player : MonoBehaviour {
         }
         
     }
-
-
     void TiltControls() 
     {
         Vector3 dir = Vector3.zero;
@@ -495,7 +476,6 @@ public class Player : MonoBehaviour {
         dir *= Time.deltaTime;
         rb.AddForce(dir * tiltMovespeed);
     }
-
     public void PepperBonus() 
     {
         rb.AddForce(Vector3.up * 1f);
@@ -507,16 +487,12 @@ public class Player : MonoBehaviour {
         //transform.FindChild("Emmiter").gameObject.SetActive(true);
         //StartCoroutine(DisplayEmitter());
     }
-
     IEnumerator DisplayEmitter() 
     {
         yield return new WaitForSeconds(0.5f);
         transform.FindChild("Emmiter").gameObject.SetActive(false);
     }
-
-
     private int bonusMultiplier = 1;
-
     public void AddScore(int amount, bool multiplier, Toppings top, Condiments con) 
     {
         if (multiplier)
@@ -545,7 +521,7 @@ public class Player : MonoBehaviour {
             }
 
             bonusMultiplier++;
-            multiplierTracker.transform.FindChild("Multiplier").GetComponent<Text>().text = "X" + bonusMultiplier;
+            multiplierTracker.transform.FindChild("Multiplier").GetComponent<Text>().text = "" + bonusMultiplier;
             multiplierTracker.gameObject.SetActive(true);
         }
         else 
@@ -558,15 +534,12 @@ public class Player : MonoBehaviour {
        score += amount * bonusMultiplier;
        scoreTracker.text = score + " pts";
        CheckScoreAchievement();
-    }
-    //also end point
-    public void MultiplyScore(float distance) 
+    }  
+    public void MultiplyScore(float distance) //also end point
     {
-
         if (distance > 10f)
         {
-            scoreTracker.text = "You Missed the Plate!";
-            //score = 0;
+            landingResult.GetComponent<Text>().text = "Missed!";
         }
         else
         {
@@ -575,6 +548,15 @@ public class Player : MonoBehaviour {
             if (distance < 0.1f)
             {
                 //GameCenterLoading.instance.AddProgressToPerfectLanding();
+                landingResult.GetComponent<Text>().text = "Perfect Landing!";
+            }
+            else if (distance < 1f)
+            {
+                landingResult.GetComponent<Text>().text = "Great Landing!";
+            }
+            else
+            {
+                landingResult.GetComponent<Text>().text = "Good Landing!";
             }
 
             //score *= accuracy;
@@ -583,10 +565,12 @@ public class Player : MonoBehaviour {
             GameCenterLoading.instance.AddProgressToCompletedSand();
             GameCenterLoading.instance.PostToLeaderboard(score, 1);
         }
-
+        landingResult.gameObject.SetActive(true);
     }
-
-
+    int CalculateEarnedCoins(int score)
+    {
+        return (score / ptsRequiredPerCoin);
+    }
     public void CheckScoreAchievement()
     {
         if (score >= 100)
@@ -614,7 +598,6 @@ public class Player : MonoBehaviour {
             GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDA");
         }
     }
-
     public void CheckToppingAchievement(int count)
     {
 
@@ -641,7 +624,24 @@ public class Player : MonoBehaviour {
                 break;
         }
     }
-
+    public void ResetValues()
+    {
+        score = 0;
+        scoreTracker.text = score + " pts";
+        bonusMultiplier = 1;
+        playerStatus = PlayerStatus.INTRO;
+        powerBar.GetComponent<PowerBar>().hasLaunched = false;
+        plateAndBread.SetActive(false);
+        toaster.SetActive(true);
+        isEndGame = false;
+        hasStarted = false;
+        GameUI.SetActive(true);
+        endMenu.SetActive(false);
+        player.gameObject.GetComponent<BoxCollider>().center = new Vector3(0f, 0.003f, 0f);
+        player.gameObject.GetComponent<BoxCollider>().size = new Vector3(0.06457424f, 0.006f, 0.05993531f);
+        player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionZ;
+        StartGame();
+    }
 }
 
 

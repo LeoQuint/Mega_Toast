@@ -34,9 +34,6 @@ public class Camera_Follow : MonoBehaviour {
 
     void Start() 
     {
-
-
-
         playerRb = target.GetComponent<Rigidbody>();
         camOffset = offset;
     }
@@ -120,6 +117,14 @@ public class Camera_Follow : MonoBehaviour {
     void OverHeadFollow() 
     {
         transform.position = Vector3.Lerp(transform.position, target.position + new Vector3(0f,3f,-0.5f), Mathf.Abs(playerRb.velocity.y) * Time.deltaTime);
+    }
+
+    public void ResetValues()
+    {
+        asFliped = false;
+        transform.rotation = startingRot;
+        transform.position = new Vector3(0f, 1f, -10f);
+        camOffset = offset;
     }
 
 }

@@ -43,13 +43,15 @@ public class LevelController : MonoBehaviour {
     public Sprite[] tSprites;
 
     public Transform targetPlayer;
+    public Transform startingPosition;
+
+    public Camera_Follow camScript;
     ///Private/////////////////////////////////////////////////////////////////////
     ///                                                                         ///
     ///                                                                         ///
     ///////////////////////////////////////////////////////////////////////////////   
-
-    //Reference to the player position. Used to spawn/despawn objects in the scene.   
-
+    
+   
     //Lists holding references to each spawned gameobject going up / down.
     List<GameObject> upSpawned = new List<GameObject>();
     List<GameObject> downSpawned = new List<GameObject>();
@@ -69,6 +71,8 @@ public class LevelController : MonoBehaviour {
 
         spawnedHeight = 0f;
 
+        
+
 #if UNITY_ANDROID
         if (!GameCenterLoading.instance.isConnected)
         {
@@ -82,7 +86,7 @@ public class LevelController : MonoBehaviour {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         //Gather all resources needed in this level.
         BuildLevel();
-        
+
     }
     //
     void Update() 
@@ -165,6 +169,12 @@ public class LevelController : MonoBehaviour {
         float xPOS;
         float yPOS;
 
+        foreach (GameObject g in downSpawned)
+        {
+           Destroy(g);          
+        }
+
+
         if (initial)
         {
             spawnedHeight = startPOS.position.y + 5f;
@@ -207,7 +217,6 @@ public class LevelController : MonoBehaviour {
         {
             if (g.transform.parent == null)
             {
-
                 Destroy(g);
             }
         }
@@ -255,6 +264,21 @@ public class LevelController : MonoBehaviour {
 
     public void Replay()
     {
-        SceneManager.LoadScene(1);
+        //SceneManager.LoadScene(1);
+        targetPlayer.position = startingPosition.position;
+        targetPlayer.rotation = startingPosition.rotation;
+
+        upSpawned.Clear();
+
+        foreach (Transform child in targetPlayer.transform.FindChild("GatherLocation"))
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+
+
+        BuildLevel();
+        Player.instance.ResetValues();
+        camScript.ResetValues();
     }
 }
