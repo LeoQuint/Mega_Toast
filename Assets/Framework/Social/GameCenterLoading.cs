@@ -50,6 +50,7 @@ public class GameCenterLoading : MonoBehaviour
 #if UNITY_EDITOR
         LoadMainScene();
 #endif
+
     }
 
 

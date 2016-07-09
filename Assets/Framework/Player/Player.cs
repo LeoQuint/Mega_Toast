@@ -86,8 +86,6 @@ public class Player : MonoBehaviour {
 
     public GameObject endPoint;
 
-    public Camera playerPictureCam;
-
     private List<bool> toppingCollected = new List<bool>();
     private List<bool> condimentCollected = new List<bool>();
 
@@ -138,12 +136,6 @@ public class Player : MonoBehaviour {
         }
         
 
-        //speedTracker.text = rb.velocity.y.ToString("F1") + " Kmph";
-       /* if (maxHeightAchived < transform.position.y)
-        {
-            maxHeightAchived = transform.position.y;
-            heightTracker.text = "Max height: " + maxHeightAchived.ToString("F1") + " Meters";
-        }*/
     
         if (mDel != null)
         {
@@ -214,7 +206,7 @@ public class Player : MonoBehaviour {
             LevelController.instance.SpawnCondiments();
             
             mDel += Flip;
-            mDel += MoveList;
+            //mDel += MoveList; Moving the list disabled
         }
 
     }
@@ -378,6 +370,7 @@ public class Player : MonoBehaviour {
         hasStarted = true;
         powerBar.gameObject.SetActive(true);
         listDisplay.gameObject.SetActive(true);
+        launchBtn.gameObject.SetActive(true);
     }
 
 
@@ -387,6 +380,7 @@ public class Player : MonoBehaviour {
         {
             return;
         }
+            launchBtn.gameObject.SetActive(false);
             playerStatus = PlayerStatus.GOINGUP;
             powerBar.GetComponent<PowerBar>().hasLaunched = true;
             StartCoroutine(DisplayPower());
@@ -413,7 +407,7 @@ public class Player : MonoBehaviour {
         if (step >= 1f)
         {
             mDel -= Flip;
-            mDel -= MoveList;
+           // mDel -= MoveList;
         }
     }
 
@@ -437,11 +431,13 @@ public class Player : MonoBehaviour {
         toaster.SetActive(false);
         plateAndBread.SetActive(true);
     }
+
+    /*List movement disabled
     void MoveList()
     {
         float step = (Time.time - stepStartTime) / flipDuration;
         listDisplay.transform.position = new Vector3(listDisplay.transform.position.x, (Screen.height * 0.8f) * step, 0f);
-    }
+    }*/
 
 
     
@@ -588,17 +584,8 @@ public class Player : MonoBehaviour {
             GameCenterLoading.instance.PostToLeaderboard(score, 1);
         }
 
-        //SetCamera();
     }
 
-    void SetCamera()
-    {
-        picMenu.SetActive(true);
-        GameUI.SetActive(false);
- 
-        playerPictureCam.depth = 6;
-        playerPictureCam.gameObject.SetActive(true);
-    }
 
     public void CheckScoreAchievement()
     {

@@ -68,10 +68,13 @@ public class LevelController : MonoBehaviour {
         instance = this;
 
         spawnedHeight = 0f;
+
+#if UNITY_ANDROID
         if (!GameCenterLoading.instance.isConnected)
         {
             GameCenterLoading.instance.RetryConnection();
         }
+#endif
     }
 
     void Start() 

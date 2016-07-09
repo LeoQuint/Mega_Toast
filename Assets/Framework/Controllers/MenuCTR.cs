@@ -33,7 +33,7 @@ public class MenuCTR : MonoBehaviour {
     public GameObject mainBg;
     public GameObject mainScene;
 
-    public Transform plateCenter;
+    public Transform playerCenter;
     public string[] selectedChar;
     public GameObject[] selectedChar_prefab;
     private int currentCharacterIndex = 0;
@@ -49,7 +49,7 @@ public class MenuCTR : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], plateCenter.position, Quaternion.identity) as GameObject;
+        currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], playerCenter.position, Quaternion.identity) as GameObject;
         charSelectCam.depth = 0;
     }
 	
@@ -60,8 +60,7 @@ public class MenuCTR : MonoBehaviour {
 
         mainMenuUI.SetActive(!t);
         charSelectUI.SetActive(t);
-        mainBg.SetActive(!t);
-        mainScene.SetActive(t);        
+      
     }
    
 
@@ -88,7 +87,7 @@ public class MenuCTR : MonoBehaviour {
                 currentCharacterIndex = selectedChar.Length - 1;
             }
         }
-        currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], plateCenter.position, Quaternion.identity) as GameObject;
+        currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], playerCenter.position, Quaternion.identity) as GameObject;
         CharSelect(selectedChar[currentCharacterIndex]);
         txt_Char_Name.text = selectedChar[currentCharacterIndex];
     }
