@@ -6,6 +6,7 @@ using GooglePlayGames.BasicApi;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+
 public class GameCenterLoading : MonoBehaviour
 {
 
@@ -34,15 +35,21 @@ public class GameCenterLoading : MonoBehaviour
 
     void Start()
     {
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
-        PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.DebugLogEnabled = true;
+        
+#if UNITY_ANDROID
+        // PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
+        //PlayGamesPlatform.InitializeInstance(config);
+        //PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
         
         // Authenticate and register a ProcessAuthentication callback
         // This call needs to be made before we can proceed to other calls in the Social API
         Social.localUser.Authenticate(ProcessAuthentication);
+#endif
+#if UNITY_EDITOR
+        LoadMainScene();
+#endif
     }
 
 
