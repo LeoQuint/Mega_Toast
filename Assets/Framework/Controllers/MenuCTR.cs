@@ -15,7 +15,7 @@ public class MenuCTR : MonoBehaviour {
     public GameObject charSelectUI;
     public Text txt_Char_Name;
 
-    bool isSoundOn = false;
+    bool isSoundOn = true;
 
     AudioSource aud;
 
@@ -40,21 +40,20 @@ public class MenuCTR : MonoBehaviour {
 
     public Camera charSelectCam;
     private GameObject currentCharacter;
-  
 
+    public GameObject mutedOverlay;
+    public GameObject tiltControlSelected;
+    public GameObject swipeControlSelected;
+  
     void Awake() 
     {
         aud = GetComponent<AudioSource>();
     }
-
 	// Use this for initialization
 	void Start () {
         currentCharacter = Instantiate(selectedChar_prefab[currentCharacterIndex], playerCenter.position, Quaternion.identity) as GameObject;
         charSelectCam.depth = 0;
     }
-	
-
-
     public void ToggleCharSelect(bool t)
     {
 
@@ -123,13 +122,39 @@ public class MenuCTR : MonoBehaviour {
     //toggle sound on/off
     public void SoundToggle() 
     {
-
+        isSoundOn = !isSoundOn;
+        if (isSoundOn)
+        {
+            mutedOverlay.SetActive(false);
+        }
+        else
+        {
+            mutedOverlay.SetActive(true);
+        }
         
     }
-    //Set the volume for soundfx or music in the settings menu.
-    public void SetVolume(int type, float vol)
+    public void SelectControls(string selected)
     {
-        
+        if (selected == "tilt")
+        {
+            tiltControlSelected.SetActive(true);
+            swipeControlSelected.SetActive(false);
+            Player.instance.SetControls(selected);
+        }
+        if (selected == "swipe")
+        {
+            tiltControlSelected.SetActive(false);
+            swipeControlSelected.SetActive(true);
+            Player.instance.SetControls(selected);
+        }
+    }
+    public void FacebookLink()
+    {
+        Application.OpenURL("https://www.facebook.com/brian.gogarty.52");
+    }
+    public void TwitterLink()
+    {
+        Application.OpenURL("https://twitter.com/sbssandwiches");
     }
 
     #endregion

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e7299db0f9fb2f54ea57f63303240aab
-timeCreated: 1468087027
+timeCreated: 1468168747
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -978,32 +978,6 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Sandwich-Hero---Spread-Open_95
-      rect:
-        serializedVersion: 2
-        x: 4344
-        y: 2899
-        width: 65
-        height: 65
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: Sandwich-Hero---Spread-Open_96
-      rect:
-        serializedVersion: 2
-        x: 4568
-        y: 2899
-        width: 64
-        height: 65
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
       name: Sandwich-Hero---Spread-Open_97
       rect:
         serializedVersion: 2
@@ -1048,21 +1022,8 @@ TextureImporter:
         serializedVersion: 2
         x: 4344
         y: 2600
-        width: 65
-        height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: Sandwich-Hero---Spread-Open_111
-      rect:
-        serializedVersion: 2
-        x: 4568
-        y: 2600
-        width: 64
-        height: 64
+        width: 290
+        height: 371
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

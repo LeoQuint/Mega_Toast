@@ -63,6 +63,7 @@ public class Player : MonoBehaviour {
     float movement = 0f;
     float movementY = 0f;
     public float tiltMovespeed = 2000f;
+    public float swipeMovespeed = 3000f;
 
     Rigidbody rb;
     //UI elements
@@ -90,6 +91,7 @@ public class Player : MonoBehaviour {
     private List<bool> condimentCollected = new List<bool>();
 
     public bool enableTiltControls = false;
+    public bool enableSwipeControls = false;
 
     bool hasStarted = false;
 
@@ -156,6 +158,10 @@ public class Player : MonoBehaviour {
             if (enableTiltControls)
             {
                 TiltControls();
+            }
+            if (enableSwipeControls)
+            {
+                SwipeControls();
             }
          
            
@@ -475,6 +481,39 @@ public class Player : MonoBehaviour {
 
         dir *= Time.deltaTime;
         rb.AddForce(dir * tiltMovespeed);
+    }
+    public void SwipeControls()
+    {
+        if (Input.touches.Length > 0)
+        {
+            Touch t = Input.GetTouch(0);
+
+            
+
+            Vector3 dir = Vector3.zero;
+
+
+            dir.x = t.deltaPosition.x;
+
+            if (dir.sqrMagnitude > 1)
+                dir.Normalize();
+
+            dir *= Time.deltaTime;
+            rb.AddForce(dir * tiltMovespeed);
+        }
+    }
+    public void SetControls(string scheme)
+    {
+        if (scheme == "swipe")
+        {
+            enableSwipeControls = true;
+            enableTiltControls = false;
+        }
+        else if (scheme == "tilt")
+        {
+            enableSwipeControls = false;
+            enableTiltControls = true;
+        }
     }
     public void PepperBonus() 
     {
