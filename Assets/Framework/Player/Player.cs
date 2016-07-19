@@ -64,6 +64,10 @@ public class Player : MonoBehaviour {
     float movementY = 0f;
     public float tiltMovespeed = 2000f;
     public float swipeMovespeed = 3000f;
+    public float maxXvelocity = 3f;
+    public float maxUp = 30f;
+    public float maxDown = -7.5f;
+    public float pepperBoostDuration = 1.2f;
 
     Rigidbody rb;
     //UI elements
@@ -74,6 +78,8 @@ public class Player : MonoBehaviour {
     public Text heightTracker;
     public GameObject multiplierTracker;
     public GameObject landingResult;
+    public GameObject scoreResults;
+    public GameObject highScoreResults;
     public GameObject GameUI;
 
     int score;
@@ -97,6 +103,7 @@ public class Player : MonoBehaviour {
 
     public int pepperCollected = 0;
     private bool isEndGame = false;
+    private bool isMidflight = false;
 
     void Awake()
     {
@@ -114,6 +121,7 @@ public class Player : MonoBehaviour {
         rb = player.GetComponent<Rigidbody>();
         rb.isKinematic = true;
         pepperCollected = 0;
+        Physics.gravity = new Vector3(0f, -0.3f, 0f);
     }
     void Update() 
     {
@@ -164,11 +172,9 @@ public class Player : MonoBehaviour {
                 SwipeControls();
             }
          
-           
-            movementY = Input.GetAxis("Vertical");
-            rb.AddForce(Vector3.forward * movementY * movementSpeed * -1f);
             movement = Input.GetAxis("Horizontal");
-            rb.AddForce(Vector3.right * movement * movementSpeed * -1f);
+            rb.AddForce(Vector3.right * movement * movementSpeed);
+            //rb.velocity = new Vector3((movement * movementSpeed), rb.velocity.y, 0f);
         }
         else 
         {
@@ -176,21 +182,29 @@ public class Player : MonoBehaviour {
             {
                 TiltControls();
             }
-           
+            else if (enableSwipeControls)
+            {
+                SwipeControls();
+            }
+#if UNITY_EDITOR
             movement = Input.GetAxis("Horizontal");
+            
             rb.AddForce(Vector3.right * movement * movementSpeed);
+            //rb.velocity = new Vector3((movement * movementSpeed), rb.velocity.y, 0f);
+          
+#endif
         }
 
-
-        rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -2f, 2f), Mathf.Clamp(rb.velocity.y, -30f, 30f), 0f);
+        
+        rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -maxXvelocity, maxXvelocity), Mathf.Clamp(rb.velocity.y, maxDown, maxUp), 0f);
 
         Vector3 clampedX = new Vector3(Mathf.Clamp(player.transform.position.x, -1.2f, 1.2f), player.transform.position.y, player.transform.position.z);
         player.transform.position = clampedX;
 
-        if (rb.velocity.y < -0.1f && playerStatus == PlayerStatus.GOINGUP)
+        if (rb.velocity.y < 1.5f && playerStatus == PlayerStatus.GOINGUP && isMidflight)
         {
             playerStatus = PlayerStatus.GOINGDOWN;
-
+            Physics.gravity = new Vector3(0f, -2.3f, 0f);
             stepStartTime = Time.time;
             stepStartRotation = upRotation;
             stepEndRotation = downRotation;
@@ -413,6 +427,7 @@ public class Player : MonoBehaviour {
     IEnumerator Wait(float delay)
     {
         yield return new WaitForSeconds(delay);
+        isMidflight = true;
         stepStartTime = Time.time;
         stepStartRotation = player.transform.rotation;
         //Removes the toaster and adds the plate with bread
@@ -469,38 +484,55 @@ public class Player : MonoBehaviour {
     {
         Vector3 dir = Vector3.zero;
 
-       
         dir.x = Input.acceleration.x;
      
-        
-
-
-
         if (dir.sqrMagnitude > 1)
             dir.Normalize();
 
         dir *= Time.deltaTime;
         rb.AddForce(dir * tiltMovespeed);
+        //rb.velocity = new Vector3((dir.x * tiltMovespeed), rb.velocity.y, 0f);
     }
+    float touchPreviousPos;
+    float touchCurrentPos;
     public void SwipeControls()
     {
         if (Input.touches.Length > 0)
         {
             Touch t = Input.GetTouch(0);
 
+            if (t.phase == TouchPhase.Began)
+            {
+                touchPreviousPos = t.position.x;
+            }
+            if (t.phase == TouchPhase.Ended)
+            {
+                touchPreviousPos = 0;
+            }
+            if (t.phase == TouchPhase.Moved)
+            {
+
+                Vector3 dir = Vector3.zero;
+
+                touchCurrentPos = t.position.x;
+                dir.x = touchCurrentPos - touchPreviousPos;
+                if (playerStatus == PlayerStatus.OVERHEAD)
+                {
+                    dir.x *= -1f;
+                }
+
+                if (dir.sqrMagnitude > 1)
+                    dir.Normalize();
+
+                dir *= Time.deltaTime;
+                rb.AddForce(dir * swipeMovespeed);
+                //rb.velocity = new Vector3((dir.x * swipeMovespeed), rb.velocity.y, 0f);
+                touchPreviousPos = touchCurrentPos;
+            }
+
             
-
-            Vector3 dir = Vector3.zero;
-
-
-            dir.x = t.deltaPosition.x;
-
-            if (dir.sqrMagnitude > 1)
-                dir.Normalize();
-
-            dir *= Time.deltaTime;
-            rb.AddForce(dir * tiltMovespeed);
         }
+      
     }
     public void SetControls(string scheme)
     {
@@ -515,21 +547,43 @@ public class Player : MonoBehaviour {
             enableTiltControls = true;
         }
     }
+    private float upwardVelocity = 0f;
+    private float pepperBonusStartTime = 0f;
+    private bool pepperActive = false;
     public void PepperBonus() 
     {
-        rb.AddForce(Vector3.up * 1f);
+        
+        if (!pepperActive)
+        {
+            pepperActive = true;
+            upwardVelocity = rb.velocity.y;
+            mDel += PepperActive;
+        }
+        pepperBonusStartTime = Time.time;
+        
         pepperCollected++;
         if (pepperCollected == 10)
         {
             //GameCenterLoading.instance.UnlockAchievement("CgkI09G1lLUQEAIQHQ");
         }
-        //transform.FindChild("Emmiter").gameObject.SetActive(true);
-        //StartCoroutine(DisplayEmitter());
+        
+        
     }
-    IEnumerator DisplayEmitter() 
+    void PepperActive()
     {
-        yield return new WaitForSeconds(0.5f);
-        transform.FindChild("Emmiter").gameObject.SetActive(false);
+        
+        Vector3 currentV = rb.velocity;
+        Debug.Log("Bonus active: "+ pepperActive + "Vel: " + currentV + "Duration: " + (pepperBonusStartTime + pepperBoostDuration - Time.time));
+        if ( Time.time >= pepperBonusStartTime + pepperBoostDuration)
+        {
+            mDel -= PepperActive;
+            rb.velocity = new Vector3(currentV.x, upwardVelocity, 0f);
+            pepperActive = false;
+            return;
+        }
+        
+        rb.velocity = new Vector3(currentV.x, maxUp, 0f);
+
     }
     private int bonusMultiplier = 1;
     public void AddScore(int amount, bool multiplier, Toppings top, Condiments con) 
@@ -559,50 +613,70 @@ public class Player : MonoBehaviour {
                 }
             }
 
-            bonusMultiplier++;
-            multiplierTracker.transform.FindChild("Multiplier").GetComponent<Text>().text = "" + bonusMultiplier;
-            multiplierTracker.gameObject.SetActive(true);
+            //bonusMultiplier++;
+            //multiplierTracker.transform.FindChild("Multiplier").GetComponent<Text>().text = "" + bonusMultiplier;
+            //multiplierTracker.gameObject.SetActive(true);
         }
         else 
         {
-            bonusMultiplier = 1;
-            multiplierTracker.gameObject.SetActive(false);
+            //bonusMultiplier = 1;
+            //multiplierTracker.gameObject.SetActive(false);
         }
-        
 
-       score += amount * bonusMultiplier;
+
+        //score += amount * bonusMultiplier;
+       score++;
        scoreTracker.text = score + " pts";
        CheckScoreAchievement();
     }  
-    public void MultiplyScore(float distance) //also end point
+    public void EndGame(float distance) //also end point
     {
+        int ingrediantsCollected = player.transform.FindChild("GatherLocation").childCount;
         if (distance > 10f)
         {
             landingResult.GetComponent<Text>().text = "Missed!";
+            score -= 10;
         }
         else
         {
+            GameCenterLoading.instance.PostToLeaderboard(score);
+            
             int accuracy = (100 - (int)(distance * 100f));
 
             if (distance < 0.1f)
             {
+                score += 50;
                 //GameCenterLoading.instance.AddProgressToPerfectLanding();
                 landingResult.GetComponent<Text>().text = "Perfect Landing!";
             }
-            else if (distance < 1f)
+            else if (distance < 0.5f)
             {
                 landingResult.GetComponent<Text>().text = "Great Landing!";
+                score += 25;
             }
             else
             {
                 landingResult.GetComponent<Text>().text = "Good Landing!";
+                score += 10;
             }
 
-            //score *= accuracy;
+           
             scoreTracker.text = score + " pts";
             CheckScoreAchievement();
             GameCenterLoading.instance.AddProgressToCompletedSand();
-            GameCenterLoading.instance.PostToLeaderboard(score, 1);
+            
+        }
+        int highScore = GameManager.instance.LoadHighScore();
+        if (highScore >= score)
+        {
+            highScoreResults.transform.FindChild("Text").GetComponent<Text>().text = "high score " + highScore;
+            scoreResults.transform.FindChild("Text").GetComponent<Text>().text = "Score " + score;
+        }
+        else
+        {
+            highScoreResults.transform.FindChild("Text").GetComponent<Text>().text = "New personal best " + score;
+            scoreResults.transform.FindChild("Text").GetComponent<Text>().text = "Score " + score;
+            GameManager.instance.SaveScore(score);
         }
         landingResult.gameObject.SetActive(true);
     }
@@ -665,7 +739,9 @@ public class Player : MonoBehaviour {
     }
     public void ResetValues()
     {
+        Physics.gravity = new Vector3(0f,-0.3f, 0f);
         score = 0;
+        isMidflight = false;
         scoreTracker.text = score + " pts";
         bonusMultiplier = 1;
         playerStatus = PlayerStatus.INTRO;

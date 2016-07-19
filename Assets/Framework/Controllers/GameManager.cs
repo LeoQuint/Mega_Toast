@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 //Represents the status of the application.
 public enum AppStatus 
@@ -47,5 +50,39 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(level);
     }
 
+    public void SaveScore(int score)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream fs = File.Create(Application.persistentDataPath + "/highScore.dat");
+
+        PlayerScore pScore = new PlayerScore();
+        pScore.highScore = score;
+
+        bf.Serialize(fs, pScore);
+    }
+
+    public int LoadHighScore()
+    {
+        if (File.Exists(Application.persistentDataPath + "/highScore.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream fs = File.Open(Application.persistentDataPath + "/highScore.dat", FileMode.Open);
+
+            PlayerScore pScore = (PlayerScore)bf.Deserialize(fs);
+            fs.Close();
+            return pScore.highScore;
+        }
+        else
+        {
+            return 0;
+        }
+       
+    }
+
    
+}
+[System.Serializable]
+class PlayerScore
+{
+    public int highScore;
 }

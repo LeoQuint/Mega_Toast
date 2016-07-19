@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class Camera_Follow : MonoBehaviour {
 
     public Transform target;
-    
+    public float delayFinalPhase = 1.5f;
+
+
     Rigidbody playerRb;
 
     Quaternion startingRot = new Quaternion(0f,0f,0f,1f);
@@ -19,7 +21,7 @@ public class Camera_Follow : MonoBehaviour {
     
 
     float stepStartTime;
-    float flipDuration = 0.5f;
+    float flipDuration = 0.25f;
 
     delegate void mDelegate();
     mDelegate mDel;
@@ -31,9 +33,15 @@ public class Camera_Follow : MonoBehaviour {
     //public references:
     public Player pScript;
 
+    private Vector3 startingPos;
+    private Quaternion initialRotation;
 
     void Start() 
     {
+        Debug.Log(transform.position);
+
+        startingPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        initialRotation = transform.rotation;
         playerRb = target.GetComponent<Rigidbody>();
         camOffset = offset;
     }
@@ -60,7 +68,7 @@ public class Camera_Follow : MonoBehaviour {
                    
                     asFliped = true;
                     mDel += Flip;
-                    Time.timeScale = 0.25f;
+                    
                     stepStartTime = Time.time;
                     endPos = transform.position + overHeadPos;
                  
@@ -71,18 +79,19 @@ public class Camera_Follow : MonoBehaviour {
             }
             else if (pScript.playerStatus == PlayerStatus.OVERHEAD)
             {
+               
                 return;
             }
 
 
-
+            
             if (playerRb.velocity.y > 0f)
             {
                 camOffset = offset;
             }
             else
             {
-                camOffset = offset * -1f;
+                camOffset = -offset;
             }
 
 
@@ -110,20 +119,32 @@ public class Camera_Follow : MonoBehaviour {
             if (overHeadFollow)
             {
                 mDel += OverHeadFollow;
-                Time.timeScale = 1f;
+                
+                StartCoroutine(FinalPhaseDelay());
             }
         }
     }
-    void OverHeadFollow() 
+    IEnumerator FinalPhaseDelay()
     {
-        transform.position = Vector3.Lerp(transform.position, target.position + new Vector3(0f,3f,-0.5f), Mathf.Abs(playerRb.velocity.y) * Time.deltaTime);
+        yield return new WaitForSeconds(0.6f);
+        Time.timeScale = 0f;
+        StartCoroutine(FinalViewDelay());
+    }
+    IEnumerator FinalViewDelay()
+    {
+        yield return new WaitForSecondsRealtime(delayFinalPhase);
+        Time.timeScale = 1f;
     }
 
+    void OverHeadFollow() 
+    {
+        transform.position = Vector3.Lerp(transform.position, target.position + new Vector3(0f,3f, 1.1f), Mathf.Abs(playerRb.velocity.y) * Time.deltaTime);
+    }
     public void ResetValues()
     {
         asFliped = false;
-        transform.rotation = startingRot;
-        transform.position = new Vector3(0f, 1f, -10f);
+        transform.rotation = initialRotation;
+        transform.position = startingPos;
         camOffset = offset;
     }
 

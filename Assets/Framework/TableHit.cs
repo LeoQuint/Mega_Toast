@@ -15,7 +15,7 @@ public class TableHit : MonoBehaviour {
 
 
 
-            Player.instance.MultiplyScore(100);
+            Player.instance.EndGame(100);
         }
     }
 }

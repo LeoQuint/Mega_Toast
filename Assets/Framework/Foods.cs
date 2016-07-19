@@ -47,11 +47,13 @@ public class Foods : MonoBehaviour {
             }
             else
             {
+
                 Destroy(gameObject);
             }
         
             if (pepper &&  Player.instance.playerStatus == PlayerStatus.GOINGUP)
             {
+                Debug.Log("Food bonus pepper!");
                 Player.instance.PepperBonus();
             }
 

@@ -211,21 +211,13 @@ public class GameCenterLoading : MonoBehaviour
             Social.localUser.Authenticate(ProcessAuthentication);
         }
     }
-    public void PostToLeaderboard(int score, int leaderboard)
+    public void PostToLeaderboard(int score)
     {
-        switch (leaderboard)
-        {
-            case 1:
-                Social.ReportScore(score, "CgkIm8DKqdILEAIQEw", (bool success) => {
-                    // handle success or failure
-                });
-            break;
-            case 2:
-                Social.ReportScore(score, "CgkIm8DKqdILEAIQFA", (bool success) => {
-                    // handle success or failure
-                });
-            break;
-        }
+      
+        Social.ReportScore(score, "CgkIm8DKqdILEAIQFA", (bool success) => {
+            // handle success or failure
+        });
+         
        
     }
 

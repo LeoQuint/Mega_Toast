@@ -80,7 +80,6 @@ public class LevelController : MonoBehaviour {
         }
 #endif
     }
-
     void Start() 
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -88,7 +87,6 @@ public class LevelController : MonoBehaviour {
         BuildLevel();
 
     }
-    //
     void Update() 
     {
         if (targetPlayer.position.y > spawnedHeight - 10f)
@@ -163,7 +161,6 @@ public class LevelController : MonoBehaviour {
         li_2.sprite = tSprites[(int)selectedToppings[1]];
         li_3.sprite = tSprites[(int)selectedToppings[2]];
     }
-
     void SpawnToppings(float amount, bool initial = true) 
     {
         float xPOS;
@@ -202,7 +199,6 @@ public class LevelController : MonoBehaviour {
 
         spawnedHeight += amount;
     }
-
     public void SpawnCondiments() 
     {
         li_1.sprite = cSprites[(int)selectedCondiments[0]];
@@ -239,7 +235,6 @@ public class LevelController : MonoBehaviour {
         }
 
     }
-
     public void SetCheckMarks(int c)
     {
         switch (c)
@@ -260,8 +255,6 @@ public class LevelController : MonoBehaviour {
                 break;
         }
     }
-
-
     public void Replay()
     {
         //SceneManager.LoadScene(1);
@@ -280,5 +273,9 @@ public class LevelController : MonoBehaviour {
         BuildLevel();
         Player.instance.ResetValues();
         camScript.ResetValues();
+    }
+    public void LoadHome()
+    {
+        GameManager.instance.Load(1);
     }
 }
