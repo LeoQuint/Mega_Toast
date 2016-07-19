@@ -22,7 +22,9 @@ public class LevelController : MonoBehaviour {
                                                                       
     //Selected Toppings and condiments for the sandwich built in this level.
     public List<Toppings> selectedToppings = new List<Toppings>();
+    public List<int> quantityToppings = new List<int>();
     public List<Condiments> selectedCondiments = new List<Condiments>();
+    public List<int> quantityCondiments = new List<int>();
 
     //Rate of spawn for objects and bonuses.
     public float objectSpawnRate = 0.5f;
@@ -104,7 +106,9 @@ public class LevelController : MonoBehaviour {
     void CreateSandwich(bool isRandom = false, int size = 3) 
     {
         selectedToppings.Clear();
+        quantityToppings.Clear();
         selectedCondiments.Clear();
+        quantityCondiments.Clear();
         if (isRandom)
         {
             for (int index = 0; index < 3; index++)
@@ -132,8 +136,6 @@ public class LevelController : MonoBehaviour {
 
                 selectedToppings.Add((Toppings)rngTop);
 
-                
-
                 do
                 {
                     duplicated = false;
@@ -155,6 +157,12 @@ public class LevelController : MonoBehaviour {
                 selectedCondiments.Add((Condiments)rngCond);
             }
 
+        }
+
+        for (int j = 0 ; j < 3; j++)
+        {
+            quantityToppings.Add(Random.Range(1,3));
+            quantityCondiments.Add(Random.Range(1, 3));
         }
 
         li_1.sprite = tSprites[(int)selectedToppings[0]];
@@ -237,21 +245,28 @@ public class LevelController : MonoBehaviour {
     }
     public void SetCheckMarks(int c)
     {
+
         switch (c)
         {
             case 1:
                 li_1.transform.FindChild("Image").gameObject.SetActive(true);
+                li_1.transform.FindChild("Text").gameObject.SetActive(false);
                 break;
             case 2:
                 li_2.transform.FindChild("Image").gameObject.SetActive(true);
+                li_2.transform.FindChild("Text").gameObject.SetActive(false);
                 break;
             case 3:
                 li_3.transform.FindChild("Image").gameObject.SetActive(true);
+                li_3.transform.FindChild("Text").gameObject.SetActive(false);
                 break;
             case 999:
                 li_1.transform.FindChild("Image").gameObject.SetActive(false);
                 li_2.transform.FindChild("Image").gameObject.SetActive(false);
                 li_3.transform.FindChild("Image").gameObject.SetActive(false);
+                li_1.transform.FindChild("Text").gameObject.SetActive(true);
+                li_2.transform.FindChild("Text").gameObject.SetActive(true);
+                li_3.transform.FindChild("Text").gameObject.SetActive(true);
                 break;
         }
     }

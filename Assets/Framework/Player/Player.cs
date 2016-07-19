@@ -94,7 +94,11 @@ public class Player : MonoBehaviour {
     public GameObject endPoint;
 
     private List<bool> toppingCollected = new List<bool>();
+    //new
+    //public List<int> toopingsCollected = new List<int>();
     private List<bool> condimentCollected = new List<bool>();
+    //new
+    //private List<int> condimentsCollected = new List<int>();
 
     public bool enableTiltControls = false;
     public bool enableSwipeControls = false;
@@ -358,6 +362,7 @@ public class Player : MonoBehaviour {
     {
         toppingCollected.Clear();
         condimentCollected.Clear();
+
         for (int i = 0; i < LevelController.instance.selectedToppings.Count; i++)
         {
             toppingCollected.Add(false);
@@ -367,10 +372,27 @@ public class Player : MonoBehaviour {
             condimentCollected.Add(false);
         }
 
+
+
         playerStatus = PlayerStatus.INTRO;
         rb.isKinematic = false;
-
+        UpdateListCount();
         StartCoroutine(DelayBreadLoading());
+    }
+    void UpdateListCount()
+    {
+        if (playerStatus != PlayerStatus.GOINGDOWN)
+        {
+            listDisplay.transform.FindChild("1").transform.FindChild("Text").GetComponent<Text>().text = LevelController.instance.quantityToppings[0].ToString();
+            listDisplay.transform.FindChild("2").transform.FindChild("Text").GetComponent<Text>().text = LevelController.instance.quantityToppings[1].ToString();
+            listDisplay.transform.FindChild("3").transform.FindChild("Text").GetComponent<Text>().text = LevelController.instance.quantityToppings[2].ToString();
+        }
+        else
+        {
+            listDisplay.transform.FindChild("1").transform.FindChild("Text").GetComponent<Text>().text = LevelController.instance.quantityCondiments[0].ToString();
+            listDisplay.transform.FindChild("2").transform.FindChild("Text").GetComponent<Text>().text = LevelController.instance.quantityCondiments[1].ToString();
+            listDisplay.transform.FindChild("3").transform.FindChild("Text").GetComponent<Text>().text = LevelController.instance.quantityCondiments[2].ToString();
+        }
     }
     IEnumerator DelayBreadLoading()
     {
@@ -516,10 +538,7 @@ public class Player : MonoBehaviour {
 
                 touchCurrentPos = t.position.x;
                 dir.x = touchCurrentPos - touchPreviousPos;
-                if (playerStatus == PlayerStatus.OVERHEAD)
-                {
-                    dir.x *= -1f;
-                }
+                
 
                 if (dir.sqrMagnitude > 1)
                     dir.Normalize();
@@ -596,7 +615,13 @@ public class Player : MonoBehaviour {
                 {
                     if (LevelController.instance.selectedToppings[i] == top)
                     {
-                        toppingCollected[i] = true;
+
+                        LevelController.instance.quantityToppings[i]--;
+                        if(LevelController.instance.quantityToppings[i] <= 0)
+                        {
+                            toppingCollected[i] = true;
+                        }
+                        
                         break;
                     }
                 }
@@ -607,7 +632,12 @@ public class Player : MonoBehaviour {
                 {
                     if (LevelController.instance.selectedCondiments[j] == con)
                     {
-                        condimentCollected[j] = true;
+                        LevelController.instance.quantityCondiments[j]--;
+                        if (LevelController.instance.quantityCondiments[j] <= 0)
+                        {
+                            condimentCollected[j] = true;
+                        }
+                        
                         break;
                     }
                 }
@@ -628,6 +658,7 @@ public class Player : MonoBehaviour {
        score++;
        scoreTracker.text = score + " pts";
        CheckScoreAchievement();
+       UpdateListCount();
     }  
     public void EndGame(float distance) //also end point
     {

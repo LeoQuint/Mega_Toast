@@ -64,7 +64,10 @@ public class Foods : MonoBehaviour {
                 if (LevelController.instance.selectedToppings[i] == typeTopping)
                 {
                     correctTopping = true;
-                    LevelController.instance.SetCheckMarks(i+1);
+                    if (LevelController.instance.quantityToppings[i] == 1)
+                    {
+                        LevelController.instance.SetCheckMarks(i + 1);
+                    }
                 }
             }
             for (int j = 0; j < LevelController.instance.selectedCondiments.Count; j++)
@@ -72,7 +75,11 @@ public class Foods : MonoBehaviour {
                 if (LevelController.instance.selectedCondiments[j] == typeCondiment)
                 {
                     correctTopping = true;
-                    LevelController.instance.SetCheckMarks(j+1);
+                    if (LevelController.instance.quantityCondiments[j] == 1)
+                    {
+                        LevelController.instance.SetCheckMarks(j + 1);
+                    }
+                    
                 }
             }
             if (correctTopping)
