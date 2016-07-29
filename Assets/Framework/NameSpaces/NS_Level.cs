@@ -22,6 +22,8 @@
         Ketchup,
         Salt,
         Pepper,
+        Honey,
+        Mayo,
         COUNT
     }
     /// Contains all bonuses

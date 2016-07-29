@@ -8,6 +8,8 @@ public class Foods : MonoBehaviour {
     public Condiments typeCondiment;
 
     public int pointValue = 1;
+
+    public int[] clipPositions;
     
     void OnTriggerEnter(Collider other)
     {
@@ -44,6 +46,7 @@ public class Foods : MonoBehaviour {
                 other.gameObject.GetComponent<BoxCollider>().size = new Vector3(colliderSize.x, colliderSize.y + 0.001f, colliderSize.z);
 
                 Player.instance.CheckToppingAchievement(childCount);
+                SoundController.instance.PlayClip(clipPositions[Random.Range(0,clipPositions.Length)]);
             }
             else
             {
@@ -56,7 +59,7 @@ public class Foods : MonoBehaviour {
                 Debug.Log("Food bonus pepper!");
                 Player.instance.PepperBonus();
             }
-
+            SoundController.instance.PlayClip(clipPositions[Random.Range(0, clipPositions.Length)]);
             bool correctTopping = false;
         
             for (int i = 0; i < LevelController.instance.selectedToppings.Count; i++)

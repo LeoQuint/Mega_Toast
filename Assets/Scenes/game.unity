@@ -8924,6 +8924,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 819946864}
   - 82: {fileID: 819946865}
+  - 114: {fileID: 819946866}
   m_Layer: 0
   m_Name: SoundController
   m_TagString: Untagged
@@ -8938,7 +8939,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 819946863}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2.982, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1560975288}
@@ -8953,11 +8954,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 7f9cb685598833843bcc528e81faa445, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   Priority: 128
@@ -9018,6 +9019,46 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &819946866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 819946863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1e1f26414135554084c7039425e066d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFXList:
+  - {fileID: 8300000, guid: 7299956a3347b2343b2bc77960d2103f, type: 3}
+  - {fileID: 8300000, guid: f5075c37ca5e4db498fc9fefdbbed330, type: 3}
+  - {fileID: 8300000, guid: d9ef4b90ddeae8141b097717a102d0b7, type: 3}
+  - {fileID: 8300000, guid: 455ea636bff6f034399a9c3dff586110, type: 3}
+  - {fileID: 8300000, guid: 93e2fef11c143ab44ac4fe9bbe1e0584, type: 3}
+  - {fileID: 8300000, guid: 1f2176998f40eb54c8e80a750f9c33f4, type: 3}
+  - {fileID: 8300000, guid: 60da595d48ce0d64e9776f890fc62785, type: 3}
+  - {fileID: 8300000, guid: d720408f93ee71a4ea43b285c1b79e22, type: 3}
+  - {fileID: 8300000, guid: 1ae7aa2a9f6c24746ba2b6ae70e1916a, type: 3}
+  - {fileID: 8300000, guid: e9eb07730848494468ac41ff5124316d, type: 3}
+  - {fileID: 8300000, guid: ae0ec7656b04c7f48aa6c949aca4ecca, type: 3}
+  - {fileID: 8300000, guid: 9fc01420e97f49d46b62a5ea9899528e, type: 3}
+  - {fileID: 8300000, guid: 6f10b285c4b82064ea4ee861143e06fd, type: 3}
+  - {fileID: 8300000, guid: 3976f03f4cdf1af4ab590aa44aa3c3e4, type: 3}
+  - {fileID: 8300000, guid: 8585f17b4ac9440448f6062130149051, type: 3}
+  - {fileID: 8300000, guid: 6a13a79406ace1742b52d8e54f1f562e, type: 3}
+  - {fileID: 8300000, guid: c65e24eb5fa04a048b7928c1c7df764c, type: 3}
+  - {fileID: 8300000, guid: ab50a4ff8ec3a0c45b0c9c068c13e33e, type: 3}
+  - {fileID: 8300000, guid: a75d16fb3d2a685488e80155f1901983, type: 3}
+  - {fileID: 8300000, guid: 6b43956051070e940ab4f0cffc23cafe, type: 3}
+  - {fileID: 8300000, guid: 29b8f6dbc6d003a4e81d94790102ebbd, type: 3}
+  - {fileID: 8300000, guid: 311f3ce522370c44a8aacd63f4ff82ab, type: 3}
+  - {fileID: 8300000, guid: 1f3361bd7098a354cad8e40239dc2c63, type: 3}
+  - {fileID: 8300000, guid: aa88514ad6a1ac448bc96db92db16e84, type: 3}
+  - {fileID: 8300000, guid: b14e1a58e3b55cf4fb62b319ead92e42, type: 3}
+  - {fileID: 8300000, guid: d50a408ca595e3247a505ebcebe396c2, type: 3}
+  - {fileID: 8300000, guid: eb7899e22cff389468d2f8353a8a5665, type: 3}
+  - {fileID: 8300000, guid: 5f61635a5dbf3584392295a4ec13cc1c, type: 3}
 --- !u!1 &821293628
 GameObject:
   m_ObjectHideFlags: 0
@@ -9992,7 +10033,6 @@ MonoBehaviour:
   toaster: {fileID: 569801704}
   plateAndBread: {fileID: 739373461}
   endPoint: {fileID: 912660213}
-  toopingsCollected: 
   enableTiltControls: 1
   enableSwipeControls: 0
   pepperCollected: 0
@@ -14528,6 +14568,8 @@ MonoBehaviour:
   - {fileID: 103876, guid: 5fe851a2fca60f0418da94410814df8c, type: 2}
   - {fileID: 151806, guid: aadf0894c89e6094b9c75b1667f7bf30, type: 2}
   - {fileID: 151806, guid: da5a79ff70bfe554499c03c1f4cce079, type: 2}
+  - {fileID: 1000011289136232, guid: 27539a0381cf99b4d96dac8d065bb29e, type: 2}
+  - {fileID: 1000010207185664, guid: cb40bb3a93829ae4eb3cc26f0ebd5232, type: 2}
   bonuses:
   - {fileID: 148470, guid: c487fe46e5bbf794fbc0235610587109, type: 2}
   li_1: {fileID: 110411836}
@@ -14538,6 +14580,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d89cf5af5be949e439d9a4d5c4a90f83, type: 3}
   - {fileID: 21300000, guid: 5111833512eb31645bb38b88e8af00a5, type: 3}
   - {fileID: 21300000, guid: 5111833512eb31645bb38b88e8af00a5, type: 3}
+  - {fileID: 21300000, guid: 87e881cf7b16c8842a65a23c0f7ab1b5, type: 3}
+  - {fileID: 21300000, guid: d89cf5af5be949e439d9a4d5c4a90f83, type: 3}
   tSprites:
   - {fileID: 21300000, guid: af7b794e2b75b9e4298b5e1a61f9430b, type: 3}
   - {fileID: 21300000, guid: 21244220ea2637344b0a6c3dd0bf3f69, type: 3}
