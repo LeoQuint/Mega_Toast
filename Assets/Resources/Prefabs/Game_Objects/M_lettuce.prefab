@@ -192,7 +192,7 @@ MonoBehaviour:
   typeTopping: 1
   typeCondiment: 6
   pointValue: 1
-  clipPositions: 1100000012000000130000001400000015000000160000001700000018000000190000001a0000001b000000
+  clipPositions: 12000000140000001a0000001b000000
 --- !u!114 &11485034
 MonoBehaviour:
   m_ObjectHideFlags: 1

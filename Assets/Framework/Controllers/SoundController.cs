@@ -28,7 +28,7 @@ public class SoundController : MonoBehaviour {
     void Start()
     {
         aud = gameObject.GetComponent<AudioSource>();
-        aud.volume = 0.7f;
+        aud.volume = 0.25f;
     }
 
     public void Mute()
@@ -37,12 +37,12 @@ public class SoundController : MonoBehaviour {
     }
     public void UnMute()
     {
-        aud.volume = 0.7f;
+        aud.volume = 0.25f;
     }
 
     public void PlayClip(int clipPos)
     {
         Debug.Log(clipPos);
-        aud.PlayOneShot(soundFXList[clipPos]);
+        aud.PlayOneShot(soundFXList[clipPos], 1f);
     }
 }

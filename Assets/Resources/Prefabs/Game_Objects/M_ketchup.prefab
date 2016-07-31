@@ -108,7 +108,7 @@ MonoBehaviour:
   typeTopping: 8
   typeCondiment: 1
   pointValue: 1
-  clipPositions: 0700000008000000090000000a0000000b0000000c0000000d0000000e000000
+  clipPositions: 0700000008000000
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
