@@ -129,7 +129,7 @@ public class Player : MonoBehaviour {
     }
     void Update() 
     {
-       
+        Debug.Log(player.transform.FindChild("Mesh").transform.rotation);
         if (!LevelController.instance.isPlaying)
         {
             return;
@@ -238,7 +238,7 @@ public class Player : MonoBehaviour {
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[0];
                
                 player.transform.FindChild("Mesh").rotation = new Quaternion(-0.7f, 0f, 0f, 0.7f);
-
+                player.transform.FindChild("Mesh").localScale = new Vector3(1f, 1f, 1f);
                 //end point
                 endPoint.transform.rotation = new Quaternion(0f, -1f, 0f, 0f);
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[0];
@@ -251,6 +251,19 @@ public class Player : MonoBehaviour {
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
                 
                 player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+                player.transform.FindChild("Mesh").localScale = new Vector3(1f, 1f,1f);
+                //end point
+                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
+                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                break;
+            case "pumpernickel":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[2];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[2];
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0.7f, 0.7f, 0f);
+                player.transform.FindChild("Mesh").localScale = new Vector3(0.008f,0.008f,0.008f);
 
                 //end point
                 endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
@@ -258,23 +271,12 @@ public class Player : MonoBehaviour {
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
                 endPoint.GetComponent<MeshRenderer>().material = materials[1];
                 break;
-            case "temp1":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
+            case "zombread":
+                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[3];
+                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[3];
 
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
-            case "temp2":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
+                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0.7f, 0.7f, 0f);
+                player.transform.FindChild("Mesh").localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
                 //end point
                 endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
@@ -282,78 +284,7 @@ public class Player : MonoBehaviour {
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
                 endPoint.GetComponent<MeshRenderer>().material = materials[1];
                 break;
-            case "temp3":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
-            case "temp4":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
-            case "temp5":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
-            case "temp6":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
-            case "temp7":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
-            case "temp8":
-                player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
-                player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-
-                //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
-                break;
+            
         }
            
    
