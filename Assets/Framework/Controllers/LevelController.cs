@@ -245,7 +245,7 @@ public class LevelController : MonoBehaviour {
     }
     public void SetCheckMarks(int c)
     {
-
+        SoundController.instance.PlayClip(Random.Range(5,7));
         switch (c)
         {
             case 1:

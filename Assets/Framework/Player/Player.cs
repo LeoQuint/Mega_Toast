@@ -574,18 +574,12 @@ public class Player : MonoBehaviour {
                 }
             }
 
-            //bonusMultiplier++;
-            //multiplierTracker.transform.FindChild("Multiplier").GetComponent<Text>().text = "" + bonusMultiplier;
-            //multiplierTracker.gameObject.SetActive(true);
+         
         }
-        else 
-        {
-            //bonusMultiplier = 1;
-            //multiplierTracker.gameObject.SetActive(false);
-        }
+    
 
 
-        //score += amount * bonusMultiplier;
+       
        score++;
        scoreTracker.text = score + " pts";
        CheckScoreAchievement();
@@ -626,6 +620,7 @@ public class Player : MonoBehaviour {
             scoreTracker.text = score + " pts";
             CheckScoreAchievement();
             GameCenterLoading.instance.AddProgressToCompletedSand();
+            GameCenterLoading.instance.AddCoins(score);
             
         }
         int highScore = GameManager.instance.LoadHighScore();

@@ -66,6 +66,7 @@ public class MenuCTR : MonoBehaviour {
     //scroll up or down the list of characters.
     public void Scroll(int s)
     {
+        PlayButton();
         if (currentCharacter)
         {
             Destroy(currentCharacter);
@@ -93,11 +94,13 @@ public class MenuCTR : MonoBehaviour {
 
     public void CharSelect(string sel) 
     {
+        PlayButton();
         player.GetComponent<Player>().ChangeModel(sel);
     }
 
     public void StartGame() 
     {
+        PlayButton();
         charSelectCam.depth = -2;
         mainBg.SetActive(false);
         mainMenuUI.SetActive(false);
@@ -110,10 +113,12 @@ public class MenuCTR : MonoBehaviour {
 
     public void ShowAchievements()
     {
+        PlayButton();
         GameCenterLoading.instance.ShowAchievements();
     }
     public void ShowLeaderboard()
     {
+        PlayButton();
         GameCenterLoading.instance.ShowLeaderboard();
     }
 
@@ -125,16 +130,19 @@ public class MenuCTR : MonoBehaviour {
         isSoundOn = !isSoundOn;
         if (isSoundOn)
         {
+            SoundController.instance.UnMute();
             mutedOverlay.SetActive(false);
         }
         else
         {
+            SoundController.instance.Mute();
             mutedOverlay.SetActive(true);
         }
         
     }
     public void SelectControls(string selected)
     {
+        PlayBlock();
         if (selected == "tilt")
         {
             tiltControlSelected.SetActive(true);
@@ -150,13 +158,23 @@ public class MenuCTR : MonoBehaviour {
     }
     public void FacebookLink()
     {
+        PlayBlock();
         Application.OpenURL("https://www.facebook.com/brian.gogarty.52");
     }
     public void TwitterLink()
     {
+        PlayBlock();
         Application.OpenURL("https://twitter.com/sbssandwiches");
     }
 
     #endregion
+    public void PlayButton()
+    {
+        SoundController.instance.PlayClip(Random.Range(2, 5));
+    }
 
+    public void PlayBlock()
+    {
+        SoundController.instance.PlayClip(Random.Range(0, 2));
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.SocialPlatforms.GameCenter;
 using GooglePlayGames;
@@ -80,6 +81,7 @@ public class GameCenterLoading : MonoBehaviour
             Debug.Log("Authenticated, checking achievements");
             // Request loaded achievements, and register a callback for processing them
             Social.LoadAchievements(ProcessLoadedAchievements);
+            UpdateCoins();
             if (scene.name == "loading")
             {
                 LoadMainScene();
@@ -99,6 +101,7 @@ public class GameCenterLoading : MonoBehaviour
 
     void LoadMainScene()
     {
+        
         SceneManager.LoadScene(1);
     }
 
@@ -108,7 +111,10 @@ public class GameCenterLoading : MonoBehaviour
         if (achievements.Length == 0)
             Debug.Log("Error: no achievements found");
         else
-            Debug.Log("Got " + achievements.Length + " achievements");
+        {
+            Debug.Log("achievements loaded");
+        }
+           
     }
 
     public void UnlockAchievement(string achievementID)
@@ -147,23 +153,16 @@ public class GameCenterLoading : MonoBehaviour
     public void AddProgressToPerfectLaunch()
     {
         UnlockAchievement("CgkIm8DKqdILEAIQEg");
-       /* RevealAchievement("CgkI09G1lLUQEAIQEw");
+ 
+    }
+
+    public void AddCoins(int coinCount)
+    {
         PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQEw", 1, (bool success) => {
-            // handle success or failure
+       "CgkIm8DKqdILEAIQFQ", coinCount, (bool success) => {
+           UpdateCoins();
         });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQFA", 1, (bool success) => {
-            // handle success or failure
-        });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQFQ", 1, (bool success) => {
-            // handle success or failure
-        });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQFg", 1, (bool success) => {
-            // handle success or failure
-        });*/
+        
     }
 
     public void AddProgressToPerfectLanding()
@@ -217,8 +216,30 @@ public class GameCenterLoading : MonoBehaviour
         Social.ReportScore(score, "CgkIm8DKqdILEAIQFA", (bool success) => {
             // handle success or failure
         });
-         
-       
+    }
+
+    public void UpdateCoins()
+    {
+        string coinTotal = "";
+        Social.LoadAchievements(achievements => {
+            if (achievements.Length > 0)
+            {
+                
+                foreach (IAchievement achievement in achievements)
+                {
+                    if (achievement.id == "CgkIm8DKqdILEAIQFQ")
+                    {
+                        coinTotal = (10000 * achievement.percentCompleted).ToString();
+                        GameObject.FindGameObjectWithTag("coin").GetComponent<Text>().text = coinTotal;
+                    }
+                       
+                }
+                
+            }
+            else
+                Debug.Log("No achievements returned");
+        });
+        
     }
 
 
