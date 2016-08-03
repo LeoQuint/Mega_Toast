@@ -103,6 +103,13 @@ public class LevelController : MonoBehaviour {
     }
     //Creates the sandwich the player is trying to build. If isRandom = true we create a random sandwich.
     //Size = the number of condiments and toppings to be randomed.
+    public void ClearForLanding()
+    {
+        foreach (GameObject g in downSpawned)
+        {
+            Destroy(g);
+        }
+    }
     void CreateSandwich(bool isRandom = false, int size = 3) 
     {
         selectedToppings.Clear();
@@ -161,16 +168,23 @@ public class LevelController : MonoBehaviour {
 
         for (int j = 0 ; j < 3; j++)
         {
-            quantityToppings.Add(Random.Range(1,3));
-            quantityCondiments.Add(Random.Range(1, 3));
+            quantityToppings.Add(Random.Range(1,4));
+            quantityCondiments.Add(Random.Range(1, 4));
         }
 
         li_1.sprite = tSprites[(int)selectedToppings[0]];
         li_2.sprite = tSprites[(int)selectedToppings[1]];
         li_3.sprite = tSprites[(int)selectedToppings[2]];
+
+
+        li_1.transform.FindChild("Text").GetComponent<Text>().text = quantityToppings[0].ToString();
+        li_2.transform.FindChild("Text").GetComponent<Text>().text = quantityToppings[1].ToString();
+        li_3.transform.FindChild("Text").GetComponent<Text>().text = quantityToppings[2].ToString();
+
     }
     void SpawnToppings(float amount, bool initial = true) 
     {
+        
         float xPOS;
         float yPOS;
 
@@ -178,10 +192,16 @@ public class LevelController : MonoBehaviour {
         {
            Destroy(g);          
         }
+        
 
 
         if (initial)
         {
+            foreach (GameObject g in upSpawned)
+            {
+                Destroy(g);
+            }
+            upSpawned.Clear();
             spawnedHeight = startPOS.position.y + 5f;
         }
         
@@ -213,7 +233,9 @@ public class LevelController : MonoBehaviour {
         li_2.sprite = cSprites[(int)selectedCondiments[1]];
         li_3.sprite = cSprites[(int)selectedCondiments[2]];
 
-
+        li_1.transform.FindChild("Text").GetComponent<Text>().text = quantityCondiments[0].ToString();
+        li_2.transform.FindChild("Text").GetComponent<Text>().text = quantityCondiments[1].ToString();
+        li_3.transform.FindChild("Text").GetComponent<Text>().text = quantityCondiments[2].ToString();
 
         SetCheckMarks(999);
 
@@ -276,7 +298,7 @@ public class LevelController : MonoBehaviour {
         targetPlayer.position = startingPosition.position;
         targetPlayer.rotation = startingPosition.rotation;
 
-        upSpawned.Clear();
+        
 
         foreach (Transform child in targetPlayer.transform.FindChild("GatherLocation"))
         {

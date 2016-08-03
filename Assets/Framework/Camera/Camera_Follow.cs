@@ -5,23 +5,26 @@ using System.Collections.Generic;
 public class Camera_Follow : MonoBehaviour {
 
     public Transform target;
-    public float delayFinalPhase = 1.5f;
-
+    public GameObject ingredientList;
 
     Rigidbody playerRb;
 
     Quaternion startingRot = new Quaternion(0f,0f,0f,1f);
     Quaternion overHeadRot = new Quaternion(0f,0.7f,-0.7f,0f);
-    Vector3 overHeadPos = new Vector3(0f, 0f, 4f);
+    Quaternion midOverhead = new Quaternion(0.4f,0.6f,-0.4f, 0.6f);
+    Quaternion endRot;
+    Vector3 overHeadPos = new Vector3(-0.03f, 19.5f, -7.5f);
+
 
     Vector3 endPos;
 
-    public float offset = 5f;
+    public float offsetDown = 5f;
+    public float offsetUp = -5f;
     private float camOffset;
     
 
     float stepStartTime;
-    float flipDuration = 0.25f;
+    float flipDuration = 0.5f;
 
     delegate void mDelegate();
     mDelegate mDel;
@@ -36,20 +39,29 @@ public class Camera_Follow : MonoBehaviour {
     private Vector3 startingPos;
     private Quaternion initialRotation;
 
+    void Awake()
+    {
+        startingPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        initialRotation = transform.rotation;
+    }
+
     void Start() 
     {
         Debug.Log(transform.position);
 
-        startingPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        initialRotation = transform.rotation;
+        
         playerRb = target.GetComponent<Rigidbody>();
-        camOffset = offset;
+        camOffset = offsetUp;
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () 
     {
-
+        Debug.Log(transform.rotation);
+        if (pScript.playerStatus == PlayerStatus.INTRO || pScript.playerStatus == PlayerStatus.CHARGING)
+        {
+            return;
+        }
         if (pScript.playerStatus == PlayerStatus.LANDED || pScript.playerStatus == PlayerStatus.DEAD)
         {
             return;
@@ -62,22 +74,25 @@ public class Camera_Follow : MonoBehaviour {
         {
             if (pScript.playerStatus == PlayerStatus.GOINGDOWN && transform.position.y < 15f)
             {
-
+                pScript.ChangeToOverhead();
+               
                 if (!asFliped)
                 {
-                   
+                    ingredientList.SetActive(false);
                     asFliped = true;
                     mDel += Flip;
-                    
+                    LevelController.instance.ClearForLanding();
+                    endRot = midOverhead;
                     stepStartTime = Time.time;
-                    endPos = transform.position + overHeadPos;
+                    endPos = overHeadPos;
                  
                     playerRb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
                 }
 
                 return;
             }
-            else if (pScript.playerStatus == PlayerStatus.OVERHEAD)
+            else if (pScript.playerStatus == PlayerStatus.OVERHEAD || asFliped)
             {
                
                 return;
@@ -87,11 +102,11 @@ public class Camera_Follow : MonoBehaviour {
             
             if (playerRb.velocity.y > 0f)
             {
-                camOffset = offset;
+                camOffset = offsetUp;
             }
             else
             {
-                camOffset = -offset;
+                camOffset = offsetDown;
             }
 
 
@@ -103,12 +118,13 @@ public class Camera_Follow : MonoBehaviour {
         }
         
 	}
-
+    bool reachedMidFlip = false;
     void Flip()
     {
         
         float step = (Time.time - stepStartTime) / flipDuration;
-        transform.rotation = Quaternion.Lerp(startingRot, overHeadRot, step);
+
+        transform.rotation = Quaternion.Lerp(startingRot, endRot, step);
 
         transform.position = Vector3.Lerp(transform.position, endPos, step);
 
@@ -116,36 +132,56 @@ public class Camera_Follow : MonoBehaviour {
         if (step >= 1f)
         {
             mDel -= Flip;
+            mDel += FlipPartTwo;
+            stepStartTime = Time.time;
+            endRot = overHeadRot;
+            startingRot = transform.rotation;
+        }
+    }
+    void FlipPartTwo()
+    {
+        float step = (Time.time - stepStartTime) / flipDuration;
+        transform.rotation = Quaternion.Lerp(startingRot, endRot, step);
+
+        transform.position = Vector3.Lerp(transform.position, endPos, step);
+        if (step >= 1f)
+        {
+            mDel -= FlipPartTwo;
             if (overHeadFollow)
             {
                 mDel += OverHeadFollow;
-                
+
                 StartCoroutine(FinalPhaseDelay());
             }
         }
     }
     IEnumerator FinalPhaseDelay()
     {
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.3f);
         Time.timeScale = 0f;
         StartCoroutine(FinalViewDelay());
     }
     IEnumerator FinalViewDelay()
     {
-        yield return new WaitForSecondsRealtime(delayFinalPhase);
+        yield return new WaitForSecondsRealtime(0.5f);
+        Physics.gravity = new Vector3(0f,-2.3f, 0f);
         Time.timeScale = 1f;
+        pScript.FlipBool(false);
     }
 
     void OverHeadFollow() 
     {
-        transform.position = Vector3.Lerp(transform.position, target.position + new Vector3(0f,3f, 1.1f), Mathf.Abs(playerRb.velocity.y) * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(-0.03f, target.position.y + 3f, -7.5f), Mathf.Abs(playerRb.velocity.y) * Time.deltaTime);
     }
     public void ResetValues()
     {
+        mDel = null;
+        reachedMidFlip = false;
         asFliped = false;
         transform.rotation = initialRotation;
         transform.position = startingPos;
-        camOffset = offset;
+        camOffset = offsetUp;
+        ingredientList.SetActive(true);
     }
 
 }

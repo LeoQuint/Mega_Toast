@@ -160,7 +160,7 @@ public class GameCenterLoading : MonoBehaviour
     {
         PlayGamesPlatform.Instance.IncrementAchievement(
        "CgkIm8DKqdILEAIQFQ", coinCount, (bool success) => {
-           UpdateCoins();
+           //UpdateCoins();
         });
         
     }

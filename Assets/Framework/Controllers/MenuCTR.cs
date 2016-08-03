@@ -44,7 +44,9 @@ public class MenuCTR : MonoBehaviour {
     public GameObject mutedOverlay;
     public GameObject tiltControlSelected;
     public GameObject swipeControlSelected;
-  
+    public GameObject titleLogo;
+
+
     void Awake() 
     {
         aud = GetComponent<AudioSource>();
@@ -56,7 +58,7 @@ public class MenuCTR : MonoBehaviour {
     }
     public void ToggleCharSelect(bool t)
     {
-
+        titleLogo.SetActive(!t);
         mainMenuUI.SetActive(!t);
         charSelectUI.SetActive(t);
       

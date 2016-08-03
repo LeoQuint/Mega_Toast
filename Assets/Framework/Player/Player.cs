@@ -33,7 +33,7 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     float flipDelay = 0.5f;
-  
+
     public PlayerStatus playerStatus;
 
     Quaternion upRotation = new Quaternion(0f, 0f, 0f, 1f);
@@ -42,7 +42,7 @@ public class Player : MonoBehaviour {
 
     public BitArray playerStats = new BitArray(32);
 
- 
+
 
     public Mesh[] meshes;
     public Material[] materials;
@@ -82,6 +82,8 @@ public class Player : MonoBehaviour {
     public GameObject highScoreResults;
     public GameObject GameUI;
 
+    private float lastVelocity;
+
     int score;
 
     public GameObject endMenu;
@@ -119,25 +121,25 @@ public class Player : MonoBehaviour {
         //Set our current level to this levelController.
         instance = this;
         score = 0;
+        hasStarted = false;
     }
     void Start()
     {
         rb = player.GetComponent<Rigidbody>();
         rb.isKinematic = true;
         pepperCollected = 0;
-        Physics.gravity = new Vector3(0f, -0.3f, 0f);
+        Physics.gravity = new Vector3(0f, -1.3f, 0f);
     }
-    void Update() 
+
+    private bool isFlipping= false;
+    void Update()
     {
-        Debug.Log(player.transform.FindChild("Mesh").transform.rotation);
-        if (!LevelController.instance.isPlaying)
+
+        if (!LevelController.instance.isPlaying || !hasStarted || isFlipping)
         {
             return;
         }
-        if (!hasStarted)
-        {
-            return;
-        }
+     
         if (playerStatus == PlayerStatus.LANDED || playerStatus == PlayerStatus.DEAD)
         {
             if (!isEndGame)
@@ -163,6 +165,7 @@ public class Player : MonoBehaviour {
             {
                 Jump();
             }
+            
             
         }
         if (playerStatus == PlayerStatus.OVERHEAD)
@@ -221,6 +224,7 @@ public class Player : MonoBehaviour {
                     return;
                 }
             }
+            
 
             LevelController.instance.SpawnCondiments();
             
@@ -233,32 +237,35 @@ public class Player : MonoBehaviour {
     {
         switch(bread)
         {
-            case "toast":
+            case "Breadley":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[0];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[0];
                
                 player.transform.FindChild("Mesh").rotation = new Quaternion(-0.7f, 0f, 0f, 0.7f);
                 player.transform.FindChild("Mesh").localScale = new Vector3(1f, 1f, 1f);
                 //end point
+                endPoint.transform.localPosition = new Vector3(0f,0f,0.01f);
+                endPoint.transform.localScale = new Vector3(1f, 1f, 1f);
                 endPoint.transform.rotation = new Quaternion(0f, -1f, 0f, 0f);
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[0];
                 endPoint.GetComponent<MeshRenderer>().material = materials[0];
 
                 break;
 
-            case "bagel":
+            case "Bagel":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
                 
                 player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
                 player.transform.FindChild("Mesh").localScale = new Vector3(1f, 1f,1f);
                 //end point
+                endPoint.transform.localPosition = new Vector3(0f, -0.004f, 0f);
                 endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
+                endPoint.transform.localScale = new Vector3(1f, 1f, 1f);
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
                 endPoint.GetComponent<MeshRenderer>().material = materials[1];
                 break;
-            case "pumpernickel":
+            case "Pumpernickolas":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[2];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[2];
 
@@ -266,12 +273,14 @@ public class Player : MonoBehaviour {
                 player.transform.FindChild("Mesh").localScale = new Vector3(0.008f,0.008f,0.008f);
 
                 //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
-
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                endPoint.transform.localPosition = new Vector3(0f, -0.0025f, 0.0025f);
+                endPoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                endPoint.transform.rotation = new Quaternion(1f, 0f, 0f, 0f);
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[2];
+                endPoint.GetComponent<MeshRenderer>().material = materials[2];
                 break;
-            case "zombread":
+            case "Zombread":
+                
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[3];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[3];
 
@@ -279,10 +288,12 @@ public class Player : MonoBehaviour {
                 player.transform.FindChild("Mesh").localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
                 //end point
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+                endPoint.transform.localPosition = new Vector3(0f, 0f, 0f);
+                endPoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                endPoint.transform.rotation = new Quaternion(1f, 0f, 0f, 0f);
 
-                endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
-                endPoint.GetComponent<MeshRenderer>().material = materials[1];
+                endPoint.GetComponent<MeshFilter>().mesh = meshes[3];
+                endPoint.GetComponent<MeshRenderer>().material = materials[3];
                 break;
             
         }
@@ -332,6 +343,7 @@ public class Player : MonoBehaviour {
         yield return new WaitForSeconds(2f);
         playerStatus = PlayerStatus.CHARGING;
         hasStarted = true;
+        Physics.gravity = new Vector3(0f, -0.3f, 0f);
         powerBar.gameObject.SetActive(true);
         listDisplay.gameObject.SetActive(true);
         launchBtn.gameObject.SetActive(true);
@@ -364,12 +376,13 @@ public class Player : MonoBehaviour {
     {
 
         float step = (Time.time - stepStartTime) / flipDuration;
+        Debug.LogWarning(stepStartRotation);
+        Debug.LogWarning(stepEndRotation);
         player.transform.rotation = Quaternion.Lerp(stepStartRotation, stepEndRotation, step);
 
         if (step >= 1f)
         {
             mDel -= Flip;
-           // mDel -= MoveList;
         }
     }
     IEnumerator DisplayPower()
@@ -416,12 +429,18 @@ public class Player : MonoBehaviour {
         }
         foreach (Transform child in childs)
         {
+            child.GetComponent<Foods>().Death();
             child.parent = null;
         }
         playerStatus = PlayerStatus.DEAD;
     }
+    public void FlipBool(bool flipped)
+    {
+        isFlipping = flipped;
+    }
     public void ChangeToOverhead() 
     {
+        FlipBool(true);
         playerStatus = PlayerStatus.OVERHEAD;
         foreach (bool b in condimentCollected)
         {
@@ -431,7 +450,10 @@ public class Player : MonoBehaviour {
                 return;
             }
         }
-        
+        lastVelocity = rb.velocity.y;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+        Physics.gravity = new Vector3(0f, -0.05f, 0f);
+
     }
     void TiltControls() 
     {
@@ -581,7 +603,7 @@ public class Player : MonoBehaviour {
 
        
        score++;
-       scoreTracker.text = score + " pts";
+       scoreTracker.text = score.ToString();
        CheckScoreAchievement();
        UpdateListCount();
     }  
@@ -591,7 +613,7 @@ public class Player : MonoBehaviour {
         if (distance > 10f)
         {
             landingResult.GetComponent<Text>().text = "Missed!";
-            score -= 10;
+            //score -= 10;
         }
         else
         {
@@ -601,23 +623,23 @@ public class Player : MonoBehaviour {
 
             if (distance < 0.1f)
             {
-                score += 50;
+                //score += 50;
                 //GameCenterLoading.instance.AddProgressToPerfectLanding();
                 landingResult.GetComponent<Text>().text = "Perfect Landing!";
             }
             else if (distance < 0.5f)
             {
                 landingResult.GetComponent<Text>().text = "Great Landing!";
-                score += 25;
+                //score += 25;
             }
             else
             {
                 landingResult.GetComponent<Text>().text = "Good Landing!";
-                score += 10;
+                //score += 10;
             }
 
            
-            scoreTracker.text = score + " pts";
+            scoreTracker.text = score.ToString();
             CheckScoreAchievement();
             GameCenterLoading.instance.AddProgressToCompletedSand();
             GameCenterLoading.instance.AddCoins(score);
@@ -699,7 +721,7 @@ public class Player : MonoBehaviour {
         Physics.gravity = new Vector3(0f,-0.3f, 0f);
         score = 0;
         isMidflight = false;
-        scoreTracker.text = score + " pts";
+        scoreTracker.text = score.ToString();
         bonusMultiplier = 1;
         playerStatus = PlayerStatus.INTRO;
         powerBar.GetComponent<PowerBar>().hasLaunched = false;
@@ -712,6 +734,7 @@ public class Player : MonoBehaviour {
         player.gameObject.GetComponent<BoxCollider>().center = new Vector3(0f, 0.003f, 0f);
         player.gameObject.GetComponent<BoxCollider>().size = new Vector3(0.06457424f, 0.006f, 0.05993531f);
         player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionZ;
+        player.GetComponent<Rigidbody>().velocity = new Vector3(0f,0f,0f);
         StartGame();
     }
 }

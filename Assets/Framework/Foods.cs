@@ -98,7 +98,15 @@ public class Foods : MonoBehaviour {
 
     }
 
-    
-    
+
+    public void Death()
+    {
+        StartCoroutine(Delay());
+    }
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Destroy(gameObject);
+    }
 
 }
