@@ -13,7 +13,7 @@ public class Camera_Follow : MonoBehaviour {
     Quaternion overHeadRot = new Quaternion(0f,0.7f,-0.7f,0f);
     Quaternion midOverhead = new Quaternion(0.4f,0.6f,-0.4f, 0.6f);
     Quaternion endRot;
-    Vector3 overHeadPos = new Vector3(-0.03f, 19.5f, -7.5f);
+    Vector3 overHeadPos = new Vector3(-0.03f, 23.5f, -7.5f);
 
 
     Vector3 endPos;
@@ -72,7 +72,7 @@ public class Camera_Follow : MonoBehaviour {
         }
         if (target != null)
         {
-            if (pScript.playerStatus == PlayerStatus.GOINGDOWN && transform.position.y < 15f)
+            if (pScript.playerStatus == PlayerStatus.GOINGDOWN && transform.position.y < 18f)
             {
                 pScript.ChangeToOverhead();
                
@@ -86,7 +86,7 @@ public class Camera_Follow : MonoBehaviour {
                     stepStartTime = Time.time;
                     endPos = overHeadPos;
                  
-                    playerRb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    //playerRb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
                 }
 

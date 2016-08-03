@@ -61,7 +61,7 @@ public class Player : MonoBehaviour {
     public float jumpForce = 500f;
     public float movementSpeed = 20f;
     float movement = 0f;
-    float movementY = 0f;
+    float movementZ = 0f;
     public float tiltMovespeed = 2000f;
     public float swipeMovespeed = 3000f;
     public float maxXvelocity = 3f;
@@ -180,7 +180,8 @@ public class Player : MonoBehaviour {
             }
          
             movement = Input.GetAxis("Horizontal");
-            rb.AddForce(Vector3.right * movement * movementSpeed);
+            movementZ = Input.GetAxis("Vertical");
+            rb.AddForce(new Vector3(movement, 0f, movementZ) * movementSpeed);
             //rb.velocity = new Vector3((movement * movementSpeed), rb.velocity.y, 0f);
         }
         else 
@@ -205,8 +206,18 @@ public class Player : MonoBehaviour {
         
         rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x, -maxXvelocity, maxXvelocity), Mathf.Clamp(rb.velocity.y, maxDown, maxUp), 0f);
 
-        Vector3 clampedX = new Vector3(Mathf.Clamp(player.transform.position.x, -1.2f, 1.2f), player.transform.position.y, player.transform.position.z);
-        player.transform.position = clampedX;
+        if (playerStatus == PlayerStatus.OVERHEAD)
+        {
+            
+            Vector3 clampedXZ = new Vector3(Mathf.Clamp(player.transform.position.x, -1f, 1f), player.transform.position.y, Mathf.Clamp(player.transform.position.z, -8.5f, -6.5f));
+            player.transform.position = clampedXZ;
+        }
+        else
+        {
+            Vector3 clampedX = new Vector3(Mathf.Clamp(player.transform.position.x, -1.2f, 1.2f), player.transform.position.y, player.transform.position.z);
+            player.transform.position = clampedX;
+        }
+        
 
         if (rb.velocity.y < 1.5f && playerStatus == PlayerStatus.GOINGUP && isMidflight)
         {
@@ -450,10 +461,11 @@ public class Player : MonoBehaviour {
                 return;
             }
         }
+        player.transform.position = new Vector3(Random.Range(-1f,1f), player.transform.position.y, Random.Range(-8.5f,6.5f));
         lastVelocity = rb.velocity.y;
         rb.velocity = new Vector3(0f, 0f, 0f);
         Physics.gravity = new Vector3(0f, -0.05f, 0f);
-
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
     void TiltControls() 
     {
@@ -718,6 +730,7 @@ public class Player : MonoBehaviour {
     }
     public void ResetValues()
     {
+        rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
         Physics.gravity = new Vector3(0f,-0.3f, 0f);
         score = 0;
         isMidflight = false;
@@ -733,7 +746,7 @@ public class Player : MonoBehaviour {
         endMenu.SetActive(false);
         player.gameObject.GetComponent<BoxCollider>().center = new Vector3(0f, 0.003f, 0f);
         player.gameObject.GetComponent<BoxCollider>().size = new Vector3(0.06457424f, 0.006f, 0.05993531f);
-        player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionZ;
+        //player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionZ;
         player.GetComponent<Rigidbody>().velocity = new Vector3(0f,0f,0f);
         StartGame();
     }

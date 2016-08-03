@@ -7,7 +7,7 @@ public class SoundController : MonoBehaviour {
 
     AudioSource aud;
 
-    public List<AudioClip> soundFXList;
+    public List<SoundFXClass> soundFXList;
 
     void Awake()
     {
@@ -43,6 +43,12 @@ public class SoundController : MonoBehaviour {
     public void PlayClip(int clipPos)
     {
         Debug.Log(clipPos);
-        aud.PlayOneShot(soundFXList[clipPos], 1f);
+        aud.PlayOneShot(soundFXList[clipPos].clip, soundFXList[clipPos].volume);
     }
+}
+[System.Serializable]
+public class SoundFXClass
+{
+    public AudioClip clip;
+    public float volume;
 }
