@@ -110,6 +110,8 @@ MonoBehaviour:
   typeCondiment: 1
   pointValue: 1
   clipPositions: 0700000008000000
+  condimentSplash: {fileID: 1000010341910504, guid: 51ad3c12d72532247854fadd95688bc1,
+    type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

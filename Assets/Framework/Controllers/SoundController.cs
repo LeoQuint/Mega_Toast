@@ -42,7 +42,7 @@ public class SoundController : MonoBehaviour {
 
     public void PlayClip(int clipPos)
     {
-        Debug.Log(clipPos);
+
         aud.PlayOneShot(soundFXList[clipPos].clip, soundFXList[clipPos].volume);
     }
 }

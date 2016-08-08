@@ -93,6 +93,8 @@ public class Player : MonoBehaviour {
     public GameObject toaster;
     public GameObject plateAndBread;
 
+    public int condimentCount;
+
     public GameObject endPoint;
 
     private List<bool> toppingCollected = new List<bool>();
@@ -125,6 +127,7 @@ public class Player : MonoBehaviour {
     }
     void Start()
     {
+        condimentCount = 0;
         rb = player.GetComponent<Rigidbody>();
         rb.isKinematic = true;
         pepperCollected = 0;
@@ -161,7 +164,7 @@ public class Player : MonoBehaviour {
         if (playerStatus == PlayerStatus.CHARGING)
         {
             
-            if (Input.GetAxis("Jump") > 0)
+            if (Input.GetButtonDown("Jump"))
             {
                 Jump();
             }
@@ -387,8 +390,7 @@ public class Player : MonoBehaviour {
     {
 
         float step = (Time.time - stepStartTime) / flipDuration;
-        Debug.LogWarning(stepStartRotation);
-        Debug.LogWarning(stepEndRotation);
+
         player.transform.rotation = Quaternion.Lerp(stepStartRotation, stepEndRotation, step);
 
         if (step >= 1f)
@@ -730,6 +732,7 @@ public class Player : MonoBehaviour {
     }
     public void ResetValues()
     {
+        condimentCount = 0;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
         Physics.gravity = new Vector3(0f,-0.3f, 0f);
         score = 0;

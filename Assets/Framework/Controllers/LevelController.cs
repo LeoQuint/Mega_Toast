@@ -308,6 +308,7 @@ public class LevelController : MonoBehaviour {
 
 
         BuildLevel();
+        SetCheckMarks(999);
         Player.instance.ResetValues();
         camScript.ResetValues();
     }

@@ -164,7 +164,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Leonard/Desktop/mega/Mega_Toast/main.keystore
+  AndroidKeystoreName: C:/Users/leona_000/Desktop/newMega/Mega_Toast/main.keystore
   AndroidKeyaliasName: sandwichhero
   AndroidTVCompatibility: 1
   AndroidIsGame: 1

@@ -57,7 +57,7 @@ public class Camera_Follow : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () 
     {
-        Debug.Log(transform.rotation);
+  
         if (pScript.playerStatus == PlayerStatus.INTRO || pScript.playerStatus == PlayerStatus.CHARGING)
         {
             return;
