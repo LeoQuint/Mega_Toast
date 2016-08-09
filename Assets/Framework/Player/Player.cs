@@ -43,6 +43,8 @@ public class Player : MonoBehaviour {
     public BitArray playerStats = new BitArray(32);
 
 
+    public float endBoostMinSpeed = 3f;
+
 
     public Mesh[] meshes;
     public Material[] materials;
@@ -176,8 +178,8 @@ public class Player : MonoBehaviour {
             {
                 Jump();
             }
-            
-            
+
+            return;
         }
         if (playerStatus == PlayerStatus.OVERHEAD)
         {
@@ -189,11 +191,12 @@ public class Player : MonoBehaviour {
             {
                 SwipeControls();
             }
-         
+#if UNITY_EDITOR   
             movement = Input.GetAxis("Horizontal");
             movementZ = Input.GetAxis("Vertical");
             rb.AddForce(new Vector3(movement, 0f, movementZ) * movementSpeed);
             //rb.velocity = new Vector3((movement * movementSpeed), rb.velocity.y, 0f);
+#endif
         }
         else 
         {
@@ -248,7 +251,7 @@ public class Player : MonoBehaviour {
             }
             
 
-            LevelController.instance.SpawnCondiments();
+            LevelController.instance.SpawnCondimentsTurn();
             
             mDel += Flip;
             //mDel += MoveList; Moving the list disabled
@@ -277,13 +280,14 @@ public class Player : MonoBehaviour {
             case "Bagel":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
-                
-                player.transform.FindChild("Mesh").rotation = new Quaternion(0f, 0f, -1f, -0.3f);
-                player.transform.FindChild("Mesh").localScale = new Vector3(1f, 1f,1f);
+
+                player.transform.FindChild("Mesh").rotation = new Quaternion(-0.2f, -0.7f, -0.7f, -0.2f);
+                player.transform.FindChild("Mesh").localScale = new Vector3(1f, 1f, 1f);
+
                 //end point
-                endPoint.transform.localPosition = new Vector3(0f, -0.004f, 0f);
-                endPoint.transform.rotation = new Quaternion(-0.7f, 0f, 0f, -0.7f);
+                endPoint.transform.localPosition = new Vector3(0f, 0f, 0f);
                 endPoint.transform.localScale = new Vector3(1f, 1f, 1f);
+                endPoint.transform.rotation = new Quaternion(1f, 0f, 0f, 0f);
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[1];
                 endPoint.GetComponent<MeshRenderer>().material = materials[1];
                 break;
@@ -462,6 +466,7 @@ public class Player : MonoBehaviour {
     }
     public void ChangeToOverhead() 
     {
+        LevelController.instance.isGoingDown = false;
         FlipBool(true);
         playerStatus = PlayerStatus.OVERHEAD;
         foreach (bool b in condimentCollected)
@@ -482,8 +487,16 @@ public class Player : MonoBehaviour {
     {
         Vector3 dir = Vector3.zero;
 
+
+
         dir.x = Input.acceleration.x;
-     
+        if (playerStatus == PlayerStatus.OVERHEAD)
+        {
+            dir.x = -Input.acceleration.x;
+            dir.z = -Input.acceleration.y;
+        }
+       
+
         if (dir.sqrMagnitude > 1)
             dir.Normalize();
 
@@ -492,6 +505,8 @@ public class Player : MonoBehaviour {
         //rb.velocity = new Vector3((dir.x * tiltMovespeed), rb.velocity.y, 0f);
     }
     float touchPreviousPos;
+    float touchPreviousPosY;
+    float touchCurrentPosY;
     float touchCurrentPos;
     public void SwipeControls()
     {
@@ -502,10 +517,12 @@ public class Player : MonoBehaviour {
             if (t.phase == TouchPhase.Began)
             {
                 touchPreviousPos = t.position.x;
+                touchPreviousPosY = t.position.y;                
             }
             if (t.phase == TouchPhase.Ended)
             {
-                touchPreviousPos = 0;
+                touchPreviousPos = 0f;
+                touchPreviousPosY = 0f;
             }
             if (t.phase == TouchPhase.Moved)
             {
@@ -513,8 +530,19 @@ public class Player : MonoBehaviour {
                 Vector3 dir = Vector3.zero;
 
                 touchCurrentPos = t.position.x;
-                dir.x = touchCurrentPos - touchPreviousPos;
-                
+                touchCurrentPosY = t.position.y;
+
+
+                if (playerStatus == PlayerStatus.OVERHEAD)
+                {
+                    dir.x = touchPreviousPos - touchCurrentPos;
+                    dir.z = touchPreviousPosY - touchCurrentPosY;
+                }
+                else
+                {
+                    dir.x = touchCurrentPos - touchPreviousPos;
+                }
+
 
                 if (dir.sqrMagnitude > 1)
                     dir.Normalize();
@@ -523,6 +551,7 @@ public class Player : MonoBehaviour {
                 rb.AddForce(dir * swipeMovespeed);
                 //rb.velocity = new Vector3((dir.x * swipeMovespeed), rb.velocity.y, 0f);
                 touchPreviousPos = touchCurrentPos;
+                touchPreviousPosY = touchCurrentPos;
             }
 
             
@@ -572,6 +601,10 @@ public class Player : MonoBehaviour {
         if ( Time.time >= pepperBonusStartTime + pepperBoostDuration)
         {
             mDel -= PepperActive;
+            if (upwardVelocity < endBoostMinSpeed)
+            {
+                upwardVelocity = endBoostMinSpeed;
+            }
             rb.velocity = new Vector3(currentV.x, upwardVelocity, 0f);
             pepperActive = false;
             return;

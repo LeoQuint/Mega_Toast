@@ -5,9 +5,14 @@ public class SoundController : MonoBehaviour {
 
     public static SoundController instance = null;
 
+    public AudioClip music;
+    public float musicVolume = 1f;
     AudioSource aud;
+    public float soundFXVolume = 1f;
 
     public List<SoundFXClass> soundFXList;
+
+    AudioSource musicAud;
 
     void Awake()
     {
@@ -31,21 +36,24 @@ public class SoundController : MonoBehaviour {
     void Start()
     {
         aud = gameObject.GetComponent<AudioSource>();
-        aud.volume = 0.25f;
+        musicAud = transform.FindChild("Music").GetComponent<AudioSource>();
+        aud.volume = soundFXVolume;
+        musicAud.volume = musicVolume;
     }
 
     public void Mute()
     {
         aud.volume = 0f;
+        musicAud.volume = 0f;
     }
     public void UnMute()
     {
-        aud.volume = 0.25f;
+        aud.volume = soundFXVolume;
+        musicAud.volume = musicVolume;
     }
 
     public void PlayClip(int clipPos)
     {
-
         aud.PlayOneShot(soundFXList[clipPos].clip, soundFXList[clipPos].volume);
     }
 }

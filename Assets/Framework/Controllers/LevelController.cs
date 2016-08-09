@@ -53,12 +53,14 @@ public class LevelController : MonoBehaviour {
     ///                                                                         ///
     ///////////////////////////////////////////////////////////////////////////////   
     
-   
+    public bool isGoingDown = false;
+
     //Lists holding references to each spawned gameobject going up / down.
     List<GameObject> upSpawned = new List<GameObject>();
     List<GameObject> downSpawned = new List<GameObject>();
 
     float spawnedHeight;
+    int downSpawnedHeight;
 
     void Awake () 
     {
@@ -72,8 +74,8 @@ public class LevelController : MonoBehaviour {
         instance = this;
 
         spawnedHeight = 0f;
+        isGoingDown = false;
 
-        
 
 #if UNITY_ANDROID
         if (!GameCenterLoading.instance.isConnected)
@@ -95,6 +97,11 @@ public class LevelController : MonoBehaviour {
         {
             SpawnToppings(20f, false);
         }
+        if (isGoingDown && targetPlayer.position.y < downSpawnedHeight + 5f)
+        {
+            SpawnCondiments(20);
+        }
+       
     }
     void BuildLevel() 
     {
@@ -227,8 +234,9 @@ public class LevelController : MonoBehaviour {
 
         spawnedHeight += amount;
     }
-    public void SpawnCondiments() 
+    public void SpawnCondimentsTurn() 
     {
+        
         li_1.sprite = cSprites[(int)selectedCondiments[0]];
         li_2.sprite = cSprites[(int)selectedCondiments[1]];
         li_3.sprite = cSprites[(int)selectedCondiments[2]];
@@ -250,20 +258,44 @@ public class LevelController : MonoBehaviour {
         float xPOS;
         float yPOS;
 
-        int height = ((int)targetPlayer.position.y) - 15;
+        int height = ((int)targetPlayer.position.y) - 3;
 
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < 15; i++)
         {
             if (Random.Range(0f, 1f) < objectSpawnRate)
             {
                 xPOS = Random.Range(-1.2f, 1.2f);
-                yPOS = 15 + i;
+                yPOS = height - i;
                 GameObject newlySpawned = Instantiate(condiments[Random.Range(0, (int)Condiments.COUNT)], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
                 downSpawned.Add(newlySpawned);
             }
 
         }
+        isGoingDown = true;
+        downSpawnedHeight = height - 15;
+        Debug.Log("Height:" + downSpawnedHeight);
+    }
+    void SpawnCondiments(int num)
+    {
+        Debug.Log("Height:"  + downSpawnedHeight);
+        float xPOS;
+        float yPOS;
 
+        int height = downSpawnedHeight -1;
+
+        for (int i = 0; i < num; i++)
+        {
+            if (Random.Range(0f, 1f) < objectSpawnRate)
+            {
+                xPOS = Random.Range(-1.2f, 1.2f);
+                yPOS = height - i;
+                GameObject newlySpawned = Instantiate(condiments[Random.Range(0, (int)Condiments.COUNT)], new Vector3(xPOS, yPOS, -7.497f), Quaternion.identity) as GameObject;
+                downSpawned.Add(newlySpawned);
+            }
+
+        }
+        downSpawnedHeight -= num;
+       
     }
     public void SetCheckMarks(int c)
     {
@@ -305,8 +337,8 @@ public class LevelController : MonoBehaviour {
             GameObject.Destroy(child.gameObject);
         }
 
-
-
+        isGoingDown = false;
+        downSpawnedHeight = 0;
         BuildLevel();
         SetCheckMarks(999);
         Player.instance.ResetValues();
