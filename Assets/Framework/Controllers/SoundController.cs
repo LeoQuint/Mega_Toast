@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class SoundController : MonoBehaviour {
 
-    public static SoundController instance;
+    public static SoundController instance = null;
 
     AudioSource aud;
 
@@ -13,13 +13,16 @@ public class SoundController : MonoBehaviour {
     {
 
 
-        if (instance != null)
+        //Check if instance already exists
+        if (instance == null)
         {
-            Destroy(this);
-        }
-        else
-        {
+            //if not, set instance to this
             instance = this;
+        }
+        //If instance already exists and it's not this:
+        else if (instance != this)
+        {
+            Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
 

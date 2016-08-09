@@ -140,6 +140,14 @@ public class Player : MonoBehaviour {
 
         if (!LevelController.instance.isPlaying || !hasStarted || isFlipping)
         {
+            if (playerStatus == PlayerStatus.DEAD)
+            {
+                if (!isEndGame)
+                {
+                    isEndGame = true;
+                    StartCoroutine(EndGameDelay());
+                }
+            }
             return;
         }
      
@@ -415,6 +423,7 @@ public class Player : MonoBehaviour {
     }
     IEnumerator EndGameDelay()
     {
+        Debug.Log("End game delay");
         yield return new WaitForSeconds(2f);
         endMenu.gameObject.SetActive(true);
         landingResult.gameObject.SetActive(false);
@@ -559,7 +568,7 @@ public class Player : MonoBehaviour {
     {
         
         Vector3 currentV = rb.velocity;
-        Debug.Log("Bonus active: "+ pepperActive + "Vel: " + currentV + "Duration: " + (pepperBonusStartTime + pepperBoostDuration - Time.time));
+        
         if ( Time.time >= pepperBonusStartTime + pepperBoostDuration)
         {
             mDel -= PepperActive;
@@ -671,6 +680,7 @@ public class Player : MonoBehaviour {
             scoreResults.transform.FindChild("Text").GetComponent<Text>().text = "Score " + score;
             GameManager.instance.SaveScore(score);
         }
+        Debug.Log("End game");
         landingResult.gameObject.SetActive(true);
     }
     int CalculateEarnedCoins(int score)

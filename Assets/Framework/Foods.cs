@@ -61,7 +61,7 @@ public class Foods : MonoBehaviour {
                     cs.transform.SetParent(parentT);
                     //cs.transform.rotation = transform.parent.rotation;
                     
-                    float offset = ((float)(Player.instance.condimentCount)) / 600f;
+                    float offset = ((float)(Player.instance.condimentCount + 3)) / 600f;
 
                     Player.instance.condimentCount++;
                     cs.transform.localPosition = new Vector3(0f, offset, 0f);
