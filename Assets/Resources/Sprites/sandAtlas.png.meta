@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 91bee093835f36f458ca81cabebb99d2
-timeCreated: 1471361796
+timeCreated: 1471363219
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -452,7 +452,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1392
-        y: 2892
+        y: 2890
         width: 272
         height: 265
       alignment: 0
@@ -464,10 +464,10 @@ TextureImporter:
       name: Sandwich-Hero---Spread-Open-v2_39
       rect:
         serializedVersion: 2
-        x: 1747
-        y: 2892
-        width: 255
-        height: 266
+        x: 1739
+        y: 2890
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -477,10 +477,10 @@ TextureImporter:
       name: Sandwich-Hero---Spread-Open-v2_40
       rect:
         serializedVersion: 2
-        x: 2092
-        y: 2892
-        width: 262
-        height: 273
+        x: 2087
+        y: 2890
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -491,9 +491,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 2437
-        y: 2892
-        width: 265
-        height: 273
+        y: 2890
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -555,10 +555,10 @@ TextureImporter:
       name: Sandwich-Hero---Spread-Open-v2_46
       rect:
         serializedVersion: 2
-        x: 1413
-        y: 2562
-        width: 241
-        height: 244
+        x: 1408
+        y: 2552
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -568,10 +568,10 @@ TextureImporter:
       name: Sandwich-Hero---Spread-Open-v2_47
       rect:
         serializedVersion: 2
-        x: 1769
-        y: 2562
-        width: 237
-        height: 247
+        x: 1757
+        y: 2550
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -581,10 +581,10 @@ TextureImporter:
       name: Sandwich-Hero---Spread-Open-v2_48
       rect:
         serializedVersion: 2
-        x: 2129
-        y: 2569
-        width: 243
-        height: 240
+        x: 2114
+        y: 2550
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -594,10 +594,10 @@ TextureImporter:
       name: Sandwich-Hero---Spread-Open-v2_49
       rect:
         serializedVersion: 2
-        x: 2451
-        y: 2562
-        width: 240
-        height: 251
+        x: 2434
+        y: 2550
+        width: 272
+        height: 265
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

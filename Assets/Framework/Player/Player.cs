@@ -115,6 +115,10 @@ public class Player : MonoBehaviour {
     private bool isEndGame = false;
     private bool isMidflight = false;
 
+    public GameObject splatParticles;
+
+    private List<GameObject> splatList = new List<GameObject>();
+
     void Awake()
     {
         //Instance gets removed by any new instance created.
@@ -134,6 +138,12 @@ public class Player : MonoBehaviour {
         rb.isKinematic = true;
         pepperCollected = 0;
         Physics.gravity = new Vector3(0f, -1.3f, 0f);
+        for (int i = 0; i < 100; i++)
+        {
+            GameObject s = Instantiate(splatParticles, new Vector3(-100f,-100f,-100f), Quaternion.identity) as GameObject;
+            s.SetActive(false);
+            splatList.Add(s);
+        }
     }
 
     private bool isFlipping= false;
@@ -477,7 +487,8 @@ public class Player : MonoBehaviour {
                 return;
             }
         }
-        player.transform.position = new Vector3(Random.Range(-1f,1f), player.transform.position.y, Random.Range(-8.5f,6.5f));
+        player.transform.position = new Vector3(Random.Range(-1f,1f), player.transform.position.y, Random.Range(-8.5f,-6.5f));
+        Debug.LogError(player.transform.position);
         lastVelocity = rb.velocity.y;
         rb.velocity = new Vector3(0f, 0f, 0f);
         Physics.gravity = new Vector3(0f, -0.05f, 0f);
@@ -666,6 +677,19 @@ public class Player : MonoBehaviour {
     public void EndGame(float distance) //also end point
     {
         int ingrediantsCollected = player.transform.FindChild("GatherLocation").childCount;
+
+        Vector3 gatherPOS = player.transform.FindChild("GatherLocation").position;
+
+
+
+
+        for (int i = 0; i < (int)(ingrediantsCollected/2); i++)
+        {
+            splatList[i].transform.position = new Vector3(gatherPOS.x, gatherPOS.y-(i/ingrediantsCollected), gatherPOS.z);
+            splatList[i].SetActive(true);
+           
+        }
+
         if (distance > 10f)
         {
             landingResult.GetComponent<Text>().text = "Missed!";
@@ -780,6 +804,7 @@ public class Player : MonoBehaviour {
         Physics.gravity = new Vector3(0f,-0.3f, 0f);
         score = 0;
         isMidflight = false;
+        isFlipping = false;
         scoreTracker.text = score.ToString();
         bonusMultiplier = 1;
         playerStatus = PlayerStatus.INTRO;

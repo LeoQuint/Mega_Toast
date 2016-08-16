@@ -85,9 +85,9 @@ public class Camera_Follow : MonoBehaviour {
                     endRot = midOverhead;
                     stepStartTime = Time.time;
                     endPos = overHeadPos;
-                 
-                    //playerRb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
+                    //playerRb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                    Debug.LogError("FlipStarts");
                 }
 
                 return;
@@ -136,6 +136,7 @@ public class Camera_Follow : MonoBehaviour {
             stepStartTime = Time.time;
             endRot = overHeadRot;
             startingRot = transform.rotation;
+            
         }
     }
     void FlipPartTwo()
@@ -157,18 +158,19 @@ public class Camera_Follow : MonoBehaviour {
     }
     IEnumerator FinalPhaseDelay()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0f);
         Time.timeScale = 0f;
         StartCoroutine(FinalViewDelay());
     }
     IEnumerator FinalViewDelay()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        
+        yield return new WaitForSecondsRealtime(0f);
         Physics.gravity = new Vector3(0f,-2.3f, 0f);
         Time.timeScale = 1f;
         pScript.FlipBool(false);
+        
     }
-
     void OverHeadFollow() 
     {
         transform.position = Vector3.Lerp(transform.position, new Vector3(-0.03f, target.position.y + 3f, -7.5f), Mathf.Abs(playerRb.velocity.y) * Time.deltaTime);

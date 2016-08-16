@@ -45,6 +45,7 @@ public class MenuCTR : MonoBehaviour {
     public GameObject tiltControlSelected;
     public GameObject swipeControlSelected;
     public GameObject titleLogo;
+    public GameObject settingsMenu;
 
 
     void Awake() 
@@ -98,6 +99,18 @@ public class MenuCTR : MonoBehaviour {
     {
         PlayButton();
         player.GetComponent<Player>().ChangeModel(sel);
+    }
+
+    public void ToogleSetting()
+    {
+        if (settingsMenu.activeSelf)
+        {
+            settingsMenu.SetActive(false);
+        }
+        else
+        {
+            settingsMenu.SetActive(true);
+        }
     }
 
     public void StartGame() 
@@ -166,7 +179,7 @@ public class MenuCTR : MonoBehaviour {
     public void TwitterLink()
     {
         PlayBlock();
-        Application.OpenURL("https://twitter.com/sbssandwiches");
+        Application.OpenURL("https://twitter.com/sandwichheroapp");
     }
 
     #endregion
