@@ -96,7 +96,8 @@ MonoBehaviour:
   typeTopping: 8
   typeCondiment: 6
   pointValue: 1
-  clipPositions: 01000000
+  clipPositions: 1800000019000000
+  condimentSplash: {fileID: 0}
 --- !u!114 &11408824
 MonoBehaviour:
   m_ObjectHideFlags: 1
