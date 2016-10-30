@@ -28,8 +28,8 @@ public class Player : MonoBehaviour {
     delegate void mDelegate();
     mDelegate mDel;
 
-    //Player Stats. Holds the modifier and stats of a particular type of bread or player.
-    public PlayerData pStats;
+    
+    public PlayerData pStats; //Player Stats. Holds the modifier and stats of a particular type of bread or player.
 
     [SerializeField]
     float flipDelay = 0.5f;
@@ -114,23 +114,29 @@ public class Player : MonoBehaviour {
     public int pepperCollected = 0;
     private bool isEndGame = false;
     private bool isMidflight = false;
+    bool intialTapHeldDown = false;             //Used to track if player is holding down on screen at game start
 
+    //Can we get rid of these? like 100+ particle spawners?
     public GameObject splatParticles;
-
-    private List<GameObject> splatList = new List<GameObject>();
+    public static GameObject splatParticlesHolder;
+    public List<GameObject> splatList = new List<GameObject>();
 
     void Awake()
     {
         //Instance gets removed by any new instance created.
         if (instance != null)
-        {
             Destroy(instance);
-        }
+
+        //No idea what these do but let's give them a holder so they aren't messy in sceneview
+        if (splatParticlesHolder == null)
+            splatParticlesHolder = new GameObject("SplatParticlesHolder");
+      
         //Set our current level to this levelController.
         instance = this;
         score = 0;
         hasStarted = false;
     }
+
     void Start()
     {
         condimentCount = 0;
@@ -138,10 +144,13 @@ public class Player : MonoBehaviour {
         rb.isKinematic = true;
         pepperCollected = 0;
         Physics.gravity = new Vector3(0f, -1.3f, 0f);
+
+        //No idea why these splats are needed, they each have a particle system and you can't even see them (mucho pricey)
         for (int i = 0; i < 100; i++)
         {
             GameObject s = Instantiate(splatParticles, new Vector3(-100f,-100f,-100f), Quaternion.identity) as GameObject;
             s.SetActive(false);
+            s.transform.SetParent(splatParticlesHolder.transform);
             splatList.Add(s);
         }
     }
@@ -149,7 +158,7 @@ public class Player : MonoBehaviour {
     private bool isFlipping= false;
     void Update()
     {
-
+        //STATE: IF NOT YET STARTED
         if (!LevelController.instance.isPlaying || !hasStarted || isFlipping)
         {
             if (playerStatus == PlayerStatus.DEAD)
@@ -162,7 +171,8 @@ public class Player : MonoBehaviour {
             }
             return;
         }
-     
+
+        //STATES: IF LANDED OR DEAD
         if (playerStatus == PlayerStatus.LANDED || playerStatus == PlayerStatus.DEAD)
         {
             if (!isEndGame)
@@ -173,57 +183,66 @@ public class Player : MonoBehaviour {
             
             return;
         }
+
+        //STATES: IF INTRO
         if (playerStatus == PlayerStatus.INTRO)
         {
             return;
         }
+
+
         if (mDel != null)
         {
             mDel();
         }
+
+        //STATES: IF CHARGING 
         if (playerStatus == PlayerStatus.CHARGING)
         {
-            
-            if (Input.GetButtonDown("Jump"))
+            //When player first holds down, track it and start the power bar
+            if (intialTapHeldDown == false && Input.GetButtonDown("Jump"))
             {
+                Debug.Log("PRIMING JUMP");
+                powerBar.gameObject.GetComponent<PowerBar>().isRunning = true; 
+                intialTapHeldDown = true;
+            }
+            else if(intialTapHeldDown && Input.GetButtonUp("Jump"))
+            {
+                Debug.Log("JUMPING");
                 Jump();
             }
 
             return;
         }
+
+        //STATES: PLAYING (OVERHEAD)
         if (playerStatus == PlayerStatus.OVERHEAD)
         {
             if (enableTiltControls)
-            {
                 TiltControls();
-            }
+
             if (enableSwipeControls)
-            {
                 SwipeControls();
-            }
+
 #if UNITY_EDITOR   
             movement = Input.GetAxis("Horizontal");
             movementZ = Input.GetAxis("Vertical");
             rb.AddForce(new Vector3(movement, 0f, movementZ) * movementSpeed);
             //rb.velocity = new Vector3((movement * movementSpeed), rb.velocity.y, 0f);
 #endif
+
         }
         else 
         {
             if (enableTiltControls)
-            {
                 TiltControls();
-            }
             else if (enableSwipeControls)
-            {
                 SwipeControls();
-            }
 #if UNITY_EDITOR
             movement = Input.GetAxis("Horizontal");
             
             rb.AddForce(Vector3.right * movement * movementSpeed);
             //rb.velocity = new Vector3((movement * movementSpeed), rb.velocity.y, 0f);
-          
 #endif
         }
 
@@ -266,8 +285,8 @@ public class Player : MonoBehaviour {
             mDel += Flip;
             //mDel += MoveList; Moving the list disabled
         }
-
     }
+
     public void ChangeModel(string bread) 
     {
         switch(bread)
@@ -331,11 +350,9 @@ public class Player : MonoBehaviour {
                 endPoint.GetComponent<MeshFilter>().mesh = meshes[3];
                 endPoint.GetComponent<MeshRenderer>().material = materials[3];
                 break;
-            
         }
-           
-   
     }
+
     public void StartGame() 
     {
         toppingCollected.Clear();
@@ -380,7 +397,7 @@ public class Player : MonoBehaviour {
         playerStatus = PlayerStatus.CHARGING;
         hasStarted = true;
         Physics.gravity = new Vector3(0f, -0.3f, 0f);
-        powerBar.gameObject.SetActive(true);
+        powerBar.gameObject.SetActive(true);                    //Moving this to 'button down' on start
         listDisplay.gameObject.SetActive(true);
         launchBtn.gameObject.SetActive(true);
     }
@@ -674,6 +691,8 @@ public class Player : MonoBehaviour {
        CheckScoreAchievement();
        UpdateListCount();
     }  
+
+
     public void EndGame(float distance) //also end point
     {
         int ingrediantsCollected = player.transform.FindChild("GatherLocation").childCount;

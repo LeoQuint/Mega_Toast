@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour {
 
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
-
     }
 
     public void Load(int level)

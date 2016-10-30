@@ -36,15 +36,18 @@ public class PlayerData {
     public BitArray unlocked;
 
 
-
+    //Constructor 
     public PlayerData()
     {
         unlocked = new BitArray(512);
     }
+
+    //Constructor
     public PlayerData(BitArray data)
     {
         this.unlocked = data;
     }
+
     //returns the percentage of unlocked elements.
     public float Completion() 
     {
