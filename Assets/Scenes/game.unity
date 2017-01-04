@@ -11895,6 +11895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7015bc94838b44444b7a346b0137025b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_FIELD_DEVICE: {fileID: 1457609293}
   player: {fileID: 1777299002}
   pStats:
     jumpForce: 400
@@ -11913,11 +11914,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 058cfd35c0385a54ebbf91e2d892d37c, type: 2}
   - {fileID: 2100000, guid: 5fc9820ef3a4d294bb2875c9a4badd25, type: 2}
   - {fileID: 2100000, guid: c7cf83884c976c24e8eb5943dc8094aa, type: 2}
+  m_TiltDeadZone: 0.15
   ptsRequiredPerCoin: 25
   flipDuration: 1
   jumpForce: 500
   movementSpeed: 500
-  tiltMovespeed: 8000
+  tiltMovespeed: 12000
   swipeMovespeed: 5000
   maxXvelocity: 3
   maxUp: 10
@@ -11942,8 +11944,6 @@ MonoBehaviour:
   enableTiltControls: 1
   enableSwipeControls: 0
   pepperCollected: 0
-  splatParticles: {fileID: 1000013662122844, guid: 5e375b5cfeffded4eb5c7839c4031e1a,
-    type: 2}
   splatList: []
 --- !u!1 &945927612
 GameObject:
@@ -19113,15 +19113,15 @@ RectTransform:
   m_GameObject: {fileID: 1457609291}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 572621891}
   m_RootOrder: 5
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -300}
-  m_SizeDelta: {x: 1500, y: 500}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1457609293
 MonoBehaviour:
@@ -19135,8 +19135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 0.034482718, g: 1, b: 0, a: 1}
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -19155,7 +19155,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 --- !u!222 &1457609294
 CanvasRenderer:
   m_ObjectHideFlags: 0

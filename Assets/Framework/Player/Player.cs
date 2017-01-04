@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#define ANDROID_DEBUG
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ public enum PlayerStatus
 
 public class Player : MonoBehaviour {
 
-    //newer CODE
+    //FOR DEBUG ON DEVICE
+    public Text DEBUG_FIELD_DEVICE;
 
     public static Player instance;
 
@@ -50,6 +52,8 @@ public class Player : MonoBehaviour {
     public Material[] materials;
 
 
+    [SerializeField][Tooltip("The size of the dead zone for tilt control.")]
+    float m_TiltDeadZone = 0.01f;
     /// OLD CODE
 
     public int ptsRequiredPerCoin = 25;
@@ -117,8 +121,6 @@ public class Player : MonoBehaviour {
     bool intialTapHeldDown = false;             //Used to track if player is holding down on screen at game start
     private bool isFlipping = false;
 
-
-
     public static GameObject splatParticlesHolder;
     public List<GameObject> splatList = new List<GameObject>();
 
@@ -126,15 +128,18 @@ public class Player : MonoBehaviour {
     {
         //Instance gets removed by any new instance created.
         if (instance != null)
+        {
             Destroy(instance);
-
+        } 
 
         //Set our current level to this levelController.
         instance = this;
         score = 0;
         hasStarted = false;
+#if ANDROID_DEBUG
+        DEBUG_FIELD_DEVICE.gameObject.SetActive(true);
+#endif
     }
-
     void Start()
     {
         condimentCount = 0;
@@ -144,8 +149,6 @@ public class Player : MonoBehaviour {
         Physics.gravity = new Vector3(0f, -1.3f, 0f);
 
     }
-
-   
     void Update()
     {
         //STATE: IF NOT YET STARTED
@@ -276,7 +279,6 @@ public class Player : MonoBehaviour {
             //mDel += MoveList; Moving the list disabled
         }
     }
-
     public void ChangeModel(string bread) 
     {
         switch(bread)
@@ -342,7 +344,6 @@ public class Player : MonoBehaviour {
                 break;
         }
     }
-
     public void StartGame() 
     {
         toppingCollected.Clear();
@@ -515,22 +516,40 @@ public class Player : MonoBehaviour {
     {
         Vector3 dir = Vector3.zero;
 
-
-
         dir.x = Input.acceleration.x;
         if (playerStatus == PlayerStatus.OVERHEAD)
         {
             dir.x = -Input.acceleration.x;
             dir.z = -Input.acceleration.y;
         }
-       
 
         if (dir.sqrMagnitude > 1)
+        {
             dir.Normalize();
+        }
+           
+        //if the acceleration is small enought we disregard.
+        if (dir.x < m_TiltDeadZone && dir.x > -m_TiltDeadZone)
+        {
+            dir.x = 0f;
+            rb.velocity = new Vector3(rb.velocity.x *0.95f, rb.velocity.y, rb.velocity.z * 0.95f);
+        }
+        if (dir.z < m_TiltDeadZone && dir.z > -m_TiltDeadZone)
+        {
+            dir.z = 0f;
+            rb.velocity = new Vector3(rb.velocity.x * 0.95f, rb.velocity.y, rb.velocity.z * 0.95f);
+        }
 
         dir *= Time.deltaTime;
+        if (Mathf.Sign(dir.x) != Mathf.Sign(rb.velocity.x))
+        {
+            rb.velocity = new Vector3(rb.velocity.x * 0.85f, rb.velocity.y, rb.velocity.z);
+        }
         rb.AddForce(dir * tiltMovespeed);
-        //rb.velocity = new Vector3((dir.x * tiltMovespeed), rb.velocity.y, 0f);
+#if ANDROID_DEBUG
+        DEBUG_FIELD_DEVICE.text = "Rigidbody: " + rb.velocity + "\n" + "Input acceleration: " + Input.acceleration + "\n" + "Added Force: " + (dir/Time.deltaTime);
+#endif
+        //rb.velocity = new Vector3((dir.x * tiltMovespeed), rb.velocity.y, (dir.z * tiltMovespeed));
     }
     float touchPreviousPos;
     float touchPreviousPosY;
@@ -691,8 +710,6 @@ public class Player : MonoBehaviour {
        CheckScoreAchievement();
        UpdateListCount();
     }  
-
-
     public void EndGame(float distance) //also end point
     {
         int ingrediantsCollected = player.transform.FindChild("GatherLocation").childCount;
