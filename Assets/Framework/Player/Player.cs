@@ -56,6 +56,8 @@ public class Player : MonoBehaviour {
     float m_TiltDeadZone = 0.01f;
     /// OLD CODE
 
+    GameObject fireLocation;//Pepperfire particle effect.
+
     public int ptsRequiredPerCoin = 25;
 
     Quaternion stepStartRotation;
@@ -130,8 +132,10 @@ public class Player : MonoBehaviour {
         if (instance != null)
         {
             Destroy(instance);
-        } 
-
+        }
+        fireLocation = player.transform.FindChild("fireLocation").gameObject;
+        fireLocation.SetActive(false);
+       
         //Set our current level to this levelController.
         instance = this;
         score = 0;
@@ -627,6 +631,7 @@ public class Player : MonoBehaviour {
         if (!pepperActive)
         {
             pepperActive = true;
+            fireLocation.SetActive(true);
             upwardVelocity = rb.velocity.y;
             mDel += PepperActive;
         }
@@ -647,6 +652,7 @@ public class Player : MonoBehaviour {
         
         if ( Time.time >= pepperBonusStartTime + pepperBoostDuration)
         {
+            fireLocation.SetActive(false);
             mDel -= PepperActive;
             if (upwardVelocity < endBoostMinSpeed)
             {
