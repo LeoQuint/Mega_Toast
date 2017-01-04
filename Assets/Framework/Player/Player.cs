@@ -115,9 +115,10 @@ public class Player : MonoBehaviour {
     private bool isEndGame = false;
     private bool isMidflight = false;
     bool intialTapHeldDown = false;             //Used to track if player is holding down on screen at game start
+    private bool isFlipping = false;
 
-    //Can we get rid of these? like 100+ particle spawners?
-    public GameObject splatParticles;
+
+
     public static GameObject splatParticlesHolder;
     public List<GameObject> splatList = new List<GameObject>();
 
@@ -127,10 +128,7 @@ public class Player : MonoBehaviour {
         if (instance != null)
             Destroy(instance);
 
-        //No idea what these do but let's give them a holder so they aren't messy in sceneview
-        if (splatParticlesHolder == null)
-            splatParticlesHolder = new GameObject("SplatParticlesHolder");
-      
+
         //Set our current level to this levelController.
         instance = this;
         score = 0;
@@ -145,17 +143,9 @@ public class Player : MonoBehaviour {
         pepperCollected = 0;
         Physics.gravity = new Vector3(0f, -1.3f, 0f);
 
-        //No idea why these splats are needed, they each have a particle system and you can't even see them (mucho pricey)
-        for (int i = 0; i < 100; i++)
-        {
-            GameObject s = Instantiate(splatParticles, new Vector3(-100f,-100f,-100f), Quaternion.identity) as GameObject;
-            s.SetActive(false);
-            s.transform.SetParent(splatParticlesHolder.transform);
-            splatList.Add(s);
-        }
     }
 
-    private bool isFlipping= false;
+   
     void Update()
     {
         //STATE: IF NOT YET STARTED
@@ -457,7 +447,17 @@ public class Player : MonoBehaviour {
         Debug.Log("End game delay");
         yield return new WaitForSeconds(2f);
         endMenu.gameObject.SetActive(true);
-        landingResult.gameObject.SetActive(false);
+        if (playerStatus == PlayerStatus.DEAD)
+        {
+            scoreResults.SetActive(false);//Your score displayed at the top.
+            highScoreResults.transform.FindChild("Text").GetComponent<Text>().text = "Game Over!";
+        }
+        else
+        {
+            scoreResults.SetActive(true);//Your score displayed at the top.
+            landingResult.gameObject.SetActive(false);//Good landing/Great/etc result text.
+        }       
+        
         GameUI.gameObject.SetActive(false);
     }
     void SetTable()

@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44895667, g: 0.4583391, b: 0.4323278, a: 1}
+  m_IndirectSpecularColor: {r: 0.4489565, g: 0.45833886, b: 0.43232763, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -12359,7 +12359,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: TAP
+  m_Text: 
 --- !u!222 &980574259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22389,7 +22389,7 @@ Rigidbody:
   m_GameObject: {fileID: 1777299002}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0.6
+  m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
