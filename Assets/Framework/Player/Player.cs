@@ -81,6 +81,14 @@ public class Player : MonoBehaviour {
     public float maxDown = -7.5f;
     public float pepperBoostDuration = 1.2f;
 
+    //Landing values
+    [SerializeField]
+    float m_LandingPerfect = 0.1f;    
+    [SerializeField]
+    float m_LandingGreat = 0.5f;
+    [SerializeField]
+    float m_LandingMissed = 10f;
+
     Rigidbody rb;
     //UI elements
     public Button launchBtn;
@@ -770,7 +778,7 @@ public class Player : MonoBehaviour {
            
         }
 
-        if (distance > 10f)
+        if (distance > m_LandingMissed)
         {
             landingResult.GetComponent<Text>().text = "Missed!";
             //score -= 10;
@@ -781,13 +789,13 @@ public class Player : MonoBehaviour {
             
             int accuracy = (100 - (int)(distance * 100f));
 
-            if (distance < 0.1f)
+            if (distance < m_LandingPerfect)
             {
                 //score += 50;
-                //GameCenterLoading.instance.AddProgressToPerfectLanding();
+                GameCenterLoading.instance.AddProgressToPerfectLanding();
                 landingResult.GetComponent<Text>().text = "Perfect Landing!";
             }
-            else if (distance < 0.5f)
+            else if (distance < m_LandingGreat)
             {
                 landingResult.GetComponent<Text>().text = "Great Landing!";
                 //score += 25;
@@ -800,9 +808,9 @@ public class Player : MonoBehaviour {
 
            
             scoreTracker.text = score.ToString();
-            CheckScoreAchievement();
+            //CheckScoreAchievement();
             GameCenterLoading.instance.AddProgressToCompletedSand();
-            GameCenterLoading.instance.AddCoins(score);
+            //GameCenterLoading.instance.AddCoins(score);
             
         }
         int highScore = GameManager.instance.LoadHighScore();
@@ -826,56 +834,34 @@ public class Player : MonoBehaviour {
     }
     public void CheckScoreAchievement()
     {
-        if (score >= 100)
-        {
-            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQCA");
-            GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQCQ");
-        }
-        if (score >= 200)
-        {
-            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQCQ");
-            GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQCg");
-        }
-        if (score >= 300)
-        {
-            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQCg");
-            GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQCw");
-        }
-        if (score >= 400)
-        {
-            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQCw");
-            GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQDA");
-        }
-        if (score >= 500)
-        {
-            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDA");
-        }
+     
     }
     public void CheckToppingAchievement(int count)
     {
-
-        switch (count)
+        if (count >= 175)
         {
-            case 30:
-                GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDQ");
-                GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQDw");
-                break;
-            case 35:
-                GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDw");
-                GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQEA");
-                break;
-            case 40:
-                GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQEA");
-                GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQEQ");
-                break;
-            case 45:
-                GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQEQ");
-                GameCenterLoading.instance.RevealAchievement("CgkIm8DKqdILEAIQDg");
-                break;
-            case 50:
-                GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDg");
-                break;
+            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQEA");
+            return;
         }
+        if (count >= 150)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDw");
+            return;
+        }
+        if (count >= 125)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQEQ");
+            return;
+        }
+        if (count >= 100)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDg");
+            return;
+        }
+        if (count >= 75)
+        {
+            GameCenterLoading.instance.UnlockAchievement("CgkIm8DKqdILEAIQDQ");
+        }        
     }
     public void ResetValues()
     {

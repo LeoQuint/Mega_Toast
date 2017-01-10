@@ -131,58 +131,62 @@ public class GameCenterLoading : MonoBehaviour
     }
     public void AddProgressToCompletedSand()
     {
-        UnlockAchievement("CgkIm8DKqdILEAIQAg");
-        PlayGamesPlatform.Instance.IncrementAchievement(
+        UnlockAchievement("CgkIm8DKqdILEAIQAg");//firs sandwich
+        PlayGamesPlatform.Instance.IncrementAchievement(//10 sandwichs
         "CgkIm8DKqdILEAIQBA", 1, (bool success) => {
             // handle success or failure
         });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkIm8DKqdILEAIQBQ", 1, (bool success) => {
-            // handle success or failure
-        });
-        PlayGamesPlatform.Instance.IncrementAchievement(
+        PlayGamesPlatform.Instance.IncrementAchievement(//25 sandwichs
         "CgkIm8DKqdILEAIQBg", 1, (bool success) => {
             // handle success or failure
         });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkIm8DKqdILEAIQBw", 1, (bool success) => {
+        PlayGamesPlatform.Instance.IncrementAchievement(//50 sandwichs
+        "CgkIm8DKqdILEAIQBQ", 1, (bool success) => {
             // handle success or failure
         });
+      
     }
 
     public void AddProgressToPerfectLaunch()
     {
-        UnlockAchievement("CgkIm8DKqdILEAIQEg");
- 
+        UnlockAchievement("CgkIm8DKqdILEAIQEg");//first time perfect
+        PlayGamesPlatform.Instance.IncrementAchievement(//5 perfect
+        "CgkIm8DKqdILEAIQFg", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(//10 perfect
+        "CgkIm8DKqdILEAIQFw", 1, (bool success) => {
+            // handle success or failure
+        });
+        PlayGamesPlatform.Instance.IncrementAchievement(//25 perfect
+        "CgkIm8DKqdILEAIQGA", 1, (bool success) => {
+            // handle success or failure
+        });
+
     }
 
-    public void AddCoins(int coinCount)
+    public void AddCoins(int coinCount)//disable for first release
     {
-        PlayGamesPlatform.Instance.IncrementAchievement(
+       /* PlayGamesPlatform.Instance.IncrementAchievement(
        "CgkIm8DKqdILEAIQFQ", coinCount, (bool success) => {
            //UpdateCoins();
         });
-        
+        */
     }
 
     public void AddProgressToPerfectLanding()
     {
-        UnlockAchievement("CgkI09G1lLUQEAIQFw");
-        RevealAchievement("CgkI09G1lLUQEAIQGA");
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQGA", 1, (bool success) => {
+        UnlockAchievement("CgkIm8DKqdILEAIQGg");//1 perfect landing.
+        PlayGamesPlatform.Instance.IncrementAchievement(//5
+        "CgkIm8DKqdILEAIQGw", 1, (bool success) => {
             // handle success or failure
         });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQGQ", 1, (bool success) => {
+        PlayGamesPlatform.Instance.IncrementAchievement(//10
+        "CgkIm8DKqdILEAIQHA", 1, (bool success) => {
             // handle success or failure
         });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQGg", 1, (bool success) => {
-            // handle success or failure
-        });
-        PlayGamesPlatform.Instance.IncrementAchievement(
-        "CgkI09G1lLUQEAIQGw", 1, (bool success) => {
+        PlayGamesPlatform.Instance.IncrementAchievement(//25
+        "CgkIm8DKqdILEAIQHQ", 1, (bool success) => {
             // handle success or failure
         });
     }
@@ -213,13 +217,13 @@ public class GameCenterLoading : MonoBehaviour
     public void PostToLeaderboard(int score)
     {
       
-        Social.ReportScore(score, "CgkIm8DKqdILEAIQFA", (bool success) => {
+        Social.ReportScore(score, "CgkIm8DKqdILEAIQFA", (bool success) => {//biggest sandwich
             // handle success or failure
         });
     }
 
-    public void UpdateCoins()
-    {
+    public void UpdateCoins()//Disable in first release.
+    {/*
         string coinTotal = "";
         Social.LoadAchievements(achievements => {
             if (achievements.Length > 0)
@@ -238,7 +242,7 @@ public class GameCenterLoading : MonoBehaviour
             }
             else
                 Debug.Log("No achievements returned");
-        });
+        });*/
         
     }
 
