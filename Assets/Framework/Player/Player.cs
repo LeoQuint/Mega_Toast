@@ -1,4 +1,4 @@
-﻿#define ANDROID_DEBUG
+﻿//#define ANDROID_DEBUG //enable for debug overlay
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -106,11 +106,7 @@ public class Player : MonoBehaviour {
     public GameObject endPoint;
 
     private List<bool> toppingCollected = new List<bool>();
-    //new
-    //public List<int> toopingsCollected = new List<int>();
     private List<bool> condimentCollected = new List<bool>();
-    //new
-    //private List<int> condimentsCollected = new List<int>();
 
     public bool enableTiltControls = false;
     public bool enableSwipeControls = false;

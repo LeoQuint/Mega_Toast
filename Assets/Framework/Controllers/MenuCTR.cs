@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MenuCTR : MonoBehaviour {
 
@@ -13,6 +13,8 @@ public class MenuCTR : MonoBehaviour {
     public GameObject gameUI;
     public GameObject titleUI;
     public GameObject charSelectUI;
+    public GameObject pauseMenu;
+    public GameObject pauseButton;
     public Text txt_Char_Name;
 
     bool isSoundOn = true;
@@ -137,6 +139,17 @@ public class MenuCTR : MonoBehaviour {
         GameCenterLoading.instance.ShowLeaderboard();
     }
 
+    public void TogglePauseMenu()
+    {        
+        pauseMenu.SetActive(!pauseMenu.activeSelf);
+        pauseButton.SetActive(!pauseButton.activeSelf);
+        Time.timeScale = pauseMenu.activeSelf ? 0f : 1f;
+    }
+
+    public void BackToMain()
+    {
+        SceneManager.LoadScene(0);
+    }
 
     #region Settings
     //toggle sound on/off
