@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44895685, g: 0.45833933, b: 0.4323278, a: 1}
+  m_IndirectSpecularColor: {r: 0.4489565, g: 0.45833886, b: 0.43232763, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -13966,12 +13966,13 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 5fc9820ef3a4d294bb2875c9a4badd25, type: 2}
   - {fileID: 2100000, guid: c7cf83884c976c24e8eb5943dc8094aa, type: 2}
   m_TiltDeadZone: 0.15
+  m_SwipeDeadZone: 10
   ptsRequiredPerCoin: 25
   flipDuration: 1
   jumpForce: 500
   movementSpeed: 500
   tiltMovespeed: 12000
-  swipeMovespeed: 5000
+  swipeMovespeed: 275
   maxXvelocity: 3
   maxUp: 10
   maxDown: -7.5
@@ -21080,7 +21081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.034482718, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.7941176, b: 0, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:

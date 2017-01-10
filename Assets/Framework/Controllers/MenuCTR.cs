@@ -144,11 +144,14 @@ public class MenuCTR : MonoBehaviour {
         pauseMenu.SetActive(!pauseMenu.activeSelf);
         pauseButton.SetActive(!pauseButton.activeSelf);
         Time.timeScale = pauseMenu.activeSelf ? 0f : 1f;
+        float pausedVolume = pauseMenu.activeSelf ? 0.5f : 1f;
+        SoundController.instance.SetVolume(pausedVolume);
     }
 
     public void BackToMain()
     {
-        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(1);
     }
 
     #region Settings

@@ -52,6 +52,11 @@ public class SoundController : MonoBehaviour {
         musicAud.volume = musicVolume;
     }
 
+    public void SetVolume(float vol)
+    {
+        aud.volume = vol;
+    }
+
     public void PlayClip(int clipPos)
     {
         aud.PlayOneShot(soundFXList[clipPos].clip, soundFXList[clipPos].volume);

@@ -364,8 +364,8 @@ public class LevelController : MonoBehaviour {
         //SceneManager.LoadScene(1);
         targetPlayer.position = startingPosition.position;
         targetPlayer.rotation = startingPosition.rotation;
-
         
+
         //Clear all collected toppings and condiments 
         foreach (Transform child in targetPlayer.transform.FindChild("GatherLocation"))
             GameObject.Destroy(child.gameObject);

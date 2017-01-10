@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
 using NS_Level;
 
 public enum PlayerStatus 
@@ -54,6 +55,9 @@ public class Player : MonoBehaviour {
 
     [SerializeField][Tooltip("The size of the dead zone for tilt control.")]
     float m_TiltDeadZone = 0.01f;
+    [SerializeField]
+    [Tooltip("The size of the dead zone for swiping.")]
+    float m_SwipeDeadZone = 0.01f;
     /// OLD CODE
 
     GameObject fireLocation;//Pepperfire particle effect.
@@ -529,15 +533,17 @@ public class Player : MonoBehaviour {
         }
            
         //if the acceleration is small enought we disregard.
-        if (dir.x < m_TiltDeadZone && dir.x > -m_TiltDeadZone)
+        if (Mathf.Abs(dir.x) < m_TiltDeadZone)
         {
             dir.x = 0f;
-            rb.velocity = new Vector3(rb.velocity.x *0.95f, rb.velocity.y, rb.velocity.z * 0.95f);
+            //Reduce motion by 5% per frame if no new input.
+            rb.velocity = new Vector3(rb.velocity.x *0.95f, rb.velocity.y, rb.velocity.z);
         }
-        if (dir.z < m_TiltDeadZone && dir.z > -m_TiltDeadZone)
+        if (Mathf.Abs(dir.z) < m_TiltDeadZone)
         {
             dir.z = 0f;
-            rb.velocity = new Vector3(rb.velocity.x * 0.95f, rb.velocity.y, rb.velocity.z * 0.95f);
+            //Reduce motion by 5% per frame if no new input.
+            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * 0.95f);
         }
 
         dir *= Time.deltaTime;
@@ -557,6 +563,7 @@ public class Player : MonoBehaviour {
     float touchCurrentPos;
     public void SwipeControls()
     {
+        float debugSwipeValue = 0f;//todo remove
         if (Input.touches.Length > 0)
         {
             Touch t = Input.GetTouch(0);
@@ -564,13 +571,15 @@ public class Player : MonoBehaviour {
             if (t.phase == TouchPhase.Began)
             {
                 touchPreviousPos = t.position.x;
-                touchPreviousPosY = t.position.y;                
+                touchPreviousPosY = t.position.y;
             }
             if (t.phase == TouchPhase.Ended)
             {
                 touchPreviousPos = 0f;
                 touchPreviousPosY = 0f;
+
             }
+
             if (t.phase == TouchPhase.Moved)
             {
 
@@ -589,21 +598,54 @@ public class Player : MonoBehaviour {
                 {
                     dir.x = touchCurrentPos - touchPreviousPos;
                 }
+                debugSwipeValue = dir.x;
+                if (Mathf.Abs(dir.x) < m_SwipeDeadZone)
+                {
+                    dir.x = 0f;
+                    //Reduce motion by 5% per frame if no new input.
+                    rb.velocity = new Vector3(rb.velocity.x * 0.95f, rb.velocity.y, rb.velocity.z);
+                }
+                if (Mathf.Abs(dir.z) < m_SwipeDeadZone)
+                {
+                    dir.z = 0f;
+                    //Reduce motion by 5% per frame if no new input.
+                    rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * 0.95f);
+                }
 
-
-                if (dir.sqrMagnitude > 1)
-                    dir.Normalize();
+                //if (dir.sqrMagnitude > 1)
+                //    dir.Normalize();
+                //If changing direction, reduce speed further.
+                if (Mathf.Sign(dir.x) != Mathf.Sign(rb.velocity.x))
+                {
+                    rb.velocity = new Vector3(rb.velocity.x * 0.5f, rb.velocity.y, rb.velocity.z);
+                }
+                //If changing direction, reduce speed further.
+                if (Mathf.Sign(dir.z) != Mathf.Sign(rb.velocity.z))
+                {
+                    rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * 0.5f);
+                }
 
                 dir *= Time.deltaTime;
                 rb.AddForce(dir * swipeMovespeed);
                 //rb.velocity = new Vector3((dir.x * swipeMovespeed), rb.velocity.y, 0f);
+
                 touchPreviousPos = touchCurrentPos;
                 touchPreviousPosY = touchCurrentPos;
-            }
 
-            
+
+
+            }
+#if ANDROID_DEBUG
+            DEBUG_FIELD_DEVICE.text = "Rigidbody: " + rb.velocity + System.Environment.NewLine
+            + "Swipe values: " + debugSwipeValue;
+#endif
+
         }
-      
+        else //if no touch is occuring, lose 5% each frame.
+        {
+            rb.velocity = new Vector3(rb.velocity.x * 0.95f, rb.velocity.y, rb.velocity.z * 0.95f);
+        }
+
     }
     public void SetControls(string scheme)
     {
@@ -837,7 +879,9 @@ public class Player : MonoBehaviour {
     }
     public void ResetValues()
     {
+        this.StopAllCoroutines();
         condimentCount = 0;
+        rb.velocity = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
         Physics.gravity = new Vector3(0f,-0.3f, 0f);
         score = 0;
