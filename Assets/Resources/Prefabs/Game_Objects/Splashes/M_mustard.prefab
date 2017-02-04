@@ -36,12 +36,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011498725446}
   m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.6119123, y: -3.1787205, z: -2.8029327}
   m_LocalScale: {x: 0.08, y: 0.08, z: 0.02}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23000013299241882
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -55,7 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 54bd3a0d6bd4af3488f3d1f8d4b85e70, type: 2}
+  - {fileID: 2100000, guid: 6baa6f71da5e53e4a89cc8ab9a773177, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -77,7 +77,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011498725446}
-  m_Mesh: {fileID: 4300000, guid: 262c0e83f9b7f14498454f6b10e0d9d4, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60d1b0566c0f16042a6e030e94783768, type: 3}
 --- !u!114 &114000011680453484
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,3 +95,5 @@ MonoBehaviour:
   pointValue: 1
   clipPositions: 
   condimentSplash: {fileID: 0}
+  splash2d: {fileID: 0}
+  splashColor: {r: 0, g: 0, b: 0, a: 0}

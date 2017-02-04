@@ -12,6 +12,8 @@ public class Foods : MonoBehaviour {
     public int[] clipPositions;
 
     public GameObject condimentSplash;
+    public GameObject splash2d;
+    public Color splashColor;
     
     void OnTriggerEnter(Collider other)
     {

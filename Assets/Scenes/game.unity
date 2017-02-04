@@ -13977,6 +13977,9 @@ MonoBehaviour:
   maxUp: 10
   maxDown: -7.5
   pepperBoostDuration: 1.2
+  m_LandingPerfect: 0.1
+  m_LandingGreat: 0.5
+  m_LandingMissed: 10
   launchBtn: {fileID: 1852100684}
   powerBar: {fileID: 1831833139}
   speedTracker: {fileID: 1539217005}
