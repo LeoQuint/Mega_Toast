@@ -310,7 +310,7 @@ public class Player : MonoBehaviour {
 
                 break;
 
-            case "Bagel":
+            case "Frodough":
                 player.transform.FindChild("Mesh").GetComponent<MeshFilter>().mesh = meshes[1];
                 player.transform.FindChild("Mesh").GetComponent<MeshRenderer>().material = materials[1];
 
@@ -427,6 +427,16 @@ public class Player : MonoBehaviour {
             stepEndRotation = upRotation;
             StartCoroutine(Wait(1f));
         
+    }
+  
+    public void HoldingLaunch()
+    {
+        Debug.Log("Holding triggered");
+        if (playerStatus != PlayerStatus.CHARGING)
+        {
+            return;
+        }
+        powerBar.GetComponent<PowerBar>().isRunning = true;
     }
     void Flip()
     {

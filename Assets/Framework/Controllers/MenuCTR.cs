@@ -6,12 +6,10 @@ public class MenuCTR : MonoBehaviour {
 
     public Sprite soundOn;
     public Sprite soundOff;
-
-    public Button soundBtn;
+    
 
     public GameObject mainMenuUI;
     public GameObject gameUI;
-    public GameObject titleUI;
     public GameObject charSelectUI;
     public GameObject pauseMenu;
     public GameObject pauseButton;
@@ -26,14 +24,11 @@ public class MenuCTR : MonoBehaviour {
 
     public GameObject player;
     public GameObject plate;
-
-    public Sprite toast;
-    public Sprite bagel;
+    
 
     public GameObject btn_Toast;
 
     public GameObject mainBg;
-    public GameObject mainScene;
 
     public Transform playerCenter;
     public string[] selectedChar;
@@ -48,6 +43,8 @@ public class MenuCTR : MonoBehaviour {
     public GameObject swipeControlSelected;
     public GameObject titleLogo;
     public GameObject settingsMenu;
+    public GameObject bottomBar;
+    public GameObject endGameOverlay;
 
 
     void Awake() 
@@ -105,13 +102,30 @@ public class MenuCTR : MonoBehaviour {
 
     public void ToogleSetting()
     {
+
         if (settingsMenu.activeSelf)
         {
             settingsMenu.SetActive(false);
+            bottomBar.SetActive(true);
+            if (LevelController.instance.isPlaying)
+            {
+                bottomBar.SetActive(true);
+                mainMenuUI.SetActive(false);
+                btn_Toast.SetActive(true);
+                endGameOverlay.SetActive(true);
+            }
         }
         else
         {
             settingsMenu.SetActive(true);
+            bottomBar.SetActive(false);
+            if (LevelController.instance.isPlaying)
+            {
+                bottomBar.SetActive(false);
+                mainMenuUI.SetActive(true);
+                btn_Toast.SetActive(false);
+                endGameOverlay.SetActive(false);
+            }
         }
     }
 

@@ -7,22 +7,26 @@ public class PowerBar : MonoBehaviour {
     public float sliderSpeed = 2f;
     Slider slider;
 
-    public bool isRunning = false;         
+    public bool isRunning = false;
     public bool hasLaunched = false;
 
 
     float startTime;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
+        isRunning = false;
+        hasLaunched = false;
+
         startTime = Time.time;
         slider = GetComponent<Slider>();
-	}
-	
-	// Update is called once per frame
-	void Update () 
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         //Ignore if not playing, has launched, or if not active yet 
-       if (!LevelController.instance.isPlaying | isRunning == false | hasLaunched)
+        if (!isRunning || hasLaunched)
             return;
 
         //Progress the slider bar 
@@ -30,5 +34,11 @@ public class PowerBar : MonoBehaviour {
         //Cap value 
         if (slider.value >= 1f)
             startTime = Time.time;
-	}
+    }
+
+    public void Restart()
+    {
+        hasLaunched = false;
+        isRunning = false;
+    }
 }

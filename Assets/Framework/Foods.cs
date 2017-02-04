@@ -59,7 +59,9 @@ public class Foods : MonoBehaviour {
                 {
                     
                     GameObject cs = Instantiate(condimentSplash, parentT.position, Quaternion.identity) as GameObject;
-
+                    GameObject s = Instantiate(splash2d, transform.position, Quaternion.identity) as GameObject;
+                    s.transform.SetParent(parentT);
+                    s.GetComponent<Renderer>().material.color = splashColor;
                     cs.transform.SetParent(parentT);
                     //cs.transform.rotation = transform.parent.rotation;
                     
